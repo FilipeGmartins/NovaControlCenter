@@ -9,6 +9,7 @@ using NovaControlCenter.App.ViewModels;
 using NovaControlCenter.App.Views;
 using NovaControlCenter.Core.Interfaces;
 using NovaControlCenter.Core.Services;
+using NovaControlCenter.Infrastructure.Audio;
 using NovaControlCenter.Infrastructure.Configuration;
 using NovaControlCenter.Infrastructure.DeviceDetection;
 using NovaControlCenter.Infrastructure.Ds4;
@@ -78,6 +79,7 @@ public partial class App : Application
         services.AddSingleton<IInputReader, XInputReader>();
         services.AddSingleton<IRumbleService, XInputRumble>();
         services.AddSingleton<IBatteryProvider, XInputBatteryProvider>();
+        services.AddSingleton<IControllerAudio, ControllerAudio>();
         services.AddSingleton<Ds4Service>();
         services.AddSingleton<IDs4Controller>(sp => sp.GetRequiredService<Ds4Service>());
         services.AddSingleton<ISettingsStore>(sp => new JsonSettingsStore(sp.GetRequiredService<ILogger<JsonSettingsStore>>()));

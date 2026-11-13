@@ -4,6 +4,25 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). 
 
 ## [Não lançado]
 
+### Áudio do controle (D4-11) — 2026-11-13
+#### Adicionado
+- `IControllerAudio` / `ControllerAudio` (NAudio.Wasapi): localiza alto-falante e microfone do controle, toca um tom de teste e mede o nível do microfone.
+- Cartão **Áudio do controle** (aba Sensores): ""Tocar som de teste"", ""Testar microfone"" com barra de nível e explicação quando o controle não expõe áudio (caso do controle do usuário).
+- `nova-probe audio-test [--name <dispositivo>]` para validar o mecanismo em qualquer saída/entrada.
+- 7 novos testes (174 no total).
+#### Removido
+- `Ds4Speaker` (substituído pelo `ControllerAudio`, que também cobre o microfone).
+#### Validação
+- Mecanismo validado no alto-falante e no microfone do PC; a detecção num DS4 original ainda aguarda o hardware (HARDWARE_DIAGNOSTICS §3.10.9).
+
+### Interface — menos poluída (2026-11-13)
+#### Alterado
+- **Página Controle PS4 em abas** (Visão geral · Sensores · Luz e vibração · Modo nos jogos) no lugar de ~10 cartões empilhados. O status foi para o cabeçalho, como chip.
+- Novos componentes de tema: **abas segmentadas** em pílula, bloco **recolhível** (`Details`) e linha de **dica** (`Hint`).
+- Informações técnicas **recolhidas por padrão**: valores brutos (Monitoramento e Sensores), cor RGB personalizada, diagnóstico do Bluetooth, explicações dos recursos avançados e do modo Xbox.
+- Configurações: o aviso grande virou um chip de uma linha, com detalhes recolhidos.
+- O botão principal fica esmaecido quando desabilitado.
+
 ### Sprint 05 — Configurações e perfis (2026-11-13)
 #### Adicionado
 - `InputProfile` (analógicos: zona morta + curva; gatilhos: zona morta + ""completo em""; intensidade da vibração) e perfis iniciais **Padrão**, **FPS** e **Corrida**.

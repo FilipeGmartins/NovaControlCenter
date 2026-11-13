@@ -60,6 +60,8 @@ Clean Architecture em 3 camadas + testes. A dependência aponta sempre para dent
 | ADR-28 | `ProfileService` no Core concentra as regras (nome obrigatório, único, até 40 caracteres; Padrão não exclui) e persiste via `ISettingsStore` | Regras num lugar só; as telas só exibem o resultado |
 | ADR-29 | Perfis só são aplicados onde o app gera a saída (PS4 → Xbox virtual). A página Configurações deixa claro o que é pré-visualização | Coerente com a regra de não apresentar ajuste de software como efeito real quando não é |
 | ADR-30 | Sliders gravam com atraso de 300 ms após o último ajuste; a prévia usa o rascunho na hora | Evita gravar o arquivo dezenas de vezes por segundo ao arrastar |
+| ADR-31 | Áudio do controle via **NAudio.Wasapi** (MIT) atrás de `IControllerAudio` | Os recursos nativos do .NET só tocam no dispositivo padrão; o WASAPI permite escolher a saída/entrada exata do controle sem mexer no padrão do Windows |
+| ADR-32 | Página PS4 em abas, com detalhes técnicos recolhidos (estilos `SegmentTabs`, `Details`, `Hint`) | Pedido do usuário: interface menos poluída, sem perder informação |
 
 ## 3. Identificação do controle
 

@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using Microsoft.Extensions.Logging.Abstractions;
 using NovaControlCenter.App.Services;
 using NovaControlCenter.App.ViewModels;
@@ -90,7 +90,7 @@ public class Ds4ViewModelPersistenceTests
         ds4.Current.Returns(new Ds4Snapshot(Ds4LinkState.Off, false, null, null, false, 0));
         var store = Substitute.For<ISettingsStore>();
         store.Load().Returns(saved ?? new AppSettings());
-        var vm = new Ds4ViewModel(ds4, null, () => Task.FromResult<string?>(null), store);
+        var vm = new Ds4ViewModel(ds4, null, null, store);
         return (vm, store, ds4);
     }
 

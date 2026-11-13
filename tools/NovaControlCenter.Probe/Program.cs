@@ -33,6 +33,7 @@ try
         "monitor" => await Commands.MonitorAsync(args, outputDir, stamp, cts.Token),
         "ds4" => Ds4Command.Run(args, cts.Token),
         "xinput-check" => XInputCheckCommand.Run(args, cts.Token),
+        "audio-test" => await AudioTestCommand.RunAsync(args, cts.Token),
         "input-test" => await InputTestCommand.RunAsync(Commands.IntOption(args, "--seconds", 90), args.Contains("--rumble"), outputDir, stamp, cts.Token),
         _ => Commands.Help(),
     };

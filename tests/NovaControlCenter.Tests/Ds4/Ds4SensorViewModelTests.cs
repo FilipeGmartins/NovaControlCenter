@@ -22,7 +22,7 @@ public class Ds4SensorViewModelTests
     public void Touch_FingerIsPlacedProportionally()
     {
         var touch = new Ds4Touch(new Ds4TouchPoint(true, 1, 960, 471), new Ds4TouchPoint(false, 0, 0, 0));
-        var vm = new Ds4ViewModel(Controller(Input(touch, new Ds4Motion())), findSpeaker: () => Task.FromResult<string?>(null));
+        var vm = new Ds4ViewModel(Controller(Input(touch, new Ds4Motion())), audio: FakeAudio.None);
 
         Assert.True(vm.Finger1Active);
         Assert.False(vm.Finger2Active);
@@ -34,7 +34,7 @@ public class Ds4SensorViewModelTests
     [Fact]
     public void Motion_ZeroTiltMakesCurrentPositionLevel()
     {
-        var vm = new Ds4ViewModel(Controller(Input(motion: new Ds4Motion(0, 0, 0, 4000, 8000, 0))), findSpeaker: () => Task.FromResult<string?>(null));
+        var vm = new Ds4ViewModel(Controller(Input(motion: new Ds4Motion(0, 0, 0, 4000, 8000, 0))), audio: FakeAudio.None);
         Assert.NotEqual(0, vm.Roll, precision: 3);
 
         vm.ZeroTiltCommand.Execute(null);
@@ -53,7 +53,7 @@ public class Ds4SensorViewModelTests
     [Fact]
     public async Task Speaker_NotExposed_ExplainsWhy()
     {
-        var vm = new Ds4ViewModel(Controller(Input()), findSpeaker: () => Task.FromResult<string?>(null));
+        var vm = new Ds4ViewModel(Controller(Input()), audio: FakeAudio.None);
         await vm.CheckSpeakerCommand.ExecuteAsync(null);
 
         Assert.Equal(StatusKind.Warning, vm.SpeakerKind);
@@ -63,7 +63,7 @@ public class Ds4SensorViewModelTests
     [Fact]
     public async Task Speaker_Found_IsReported()
     {
-        var vm = new Ds4ViewModel(Controller(Input()), findSpeaker: () => Task.FromResult<string?>("Alto-falantes (Wireless Controller)"));
+        var vm = new Ds4ViewModel(Controller(Input()), audio: FakeAudio.WithController());
         await vm.CheckSpeakerCommand.ExecuteAsync(null);
 
         Assert.Equal(StatusKind.Ok, vm.SpeakerKind);
@@ -73,7 +73,7 @@ public class Ds4SensorViewModelTests
     [Fact]
     public void BasicBluetoothReport_HasNoSensors()
     {
-        var vm = new Ds4ViewModel(Controller(Input(), bluetooth: true), findSpeaker: () => Task.FromResult<string?>(null));
+        var vm = new Ds4ViewModel(Controller(Input(), bluetooth: true), audio: FakeAudio.None);
         Assert.False(vm.SensorsAvailable);
     }
 }
@@ -90,7 +90,7 @@ public class GameViewTests
         var xinput = Substitute.For<NovaControlCenter.Core.Interfaces.IInputReader>();
         xinput.Read(2).Returns(ControllerState.Neutral with { Buttons = GamepadButtons.A | GamepadButtons.Y });
 
-        var vm = new Ds4ViewModel(ds4, xinput, () => Task.FromResult<string?>(null));
+        var vm = new Ds4ViewModel(ds4, xinput, FakeAudio.None);
 
         Assert.True(vm.GameViewActive);
         Assert.Contains("A", vm.GameViewButtons, StringComparison.Ordinal);
@@ -102,7 +102,7 @@ public class GameViewTests
     {
         var ds4 = Substitute.For<IDs4Controller>();
         ds4.Current.Returns(new Ds4Snapshot(Ds4LinkState.Connected, false, null, null, false, 0));
-        var vm = new Ds4ViewModel(ds4, Substitute.For<NovaControlCenter.Core.Interfaces.IInputReader>(), () => Task.FromResult<string?>(null));
+        var vm = new Ds4ViewModel(ds4, Substitute.For<NovaControlCenter.Core.Interfaces.IInputReader>(), FakeAudio.None);
         Assert.False(vm.GameViewActive);
     }
 }

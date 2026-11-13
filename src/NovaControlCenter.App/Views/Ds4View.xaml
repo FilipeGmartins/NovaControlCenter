@@ -5,14 +5,13 @@
              xmlns:conv="clr-namespace:NovaControlCenter.App.Converters">
     <UserControl.Resources>
         <conv:StatusKindToBrushConverter x:Key="StatusBrush" />
-        <conv:StatusKindToGlyphConverter x:Key="StatusGlyph" />
         <conv:BoolToVisibilityConverter x:Key="BoolVis" />
 
         <!-- Amostra de cor clicável -->
         <Style x:Key="Swatch" TargetType="Button">
-            <Setter Property="Width" Value="30" />
-            <Setter Property="Height" Value="30" />
-            <Setter Property="Margin" Value="0,0,8,8" />
+            <Setter Property="Width" Value="32" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="Margin" Value="0,0,10,10" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -23,7 +22,7 @@
                                 <Setter TargetName="Dot" Property="Stroke" Value="White" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Dot" Property="Opacity" Value="0.35" />
+                                <Setter TargetName="Dot" Property="Opacity" Value="0.3" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -31,18 +30,18 @@
             </Setter>
         </Style>
 
-        <!-- Opção selecionável (formato de envio) -->
+        <!-- Opção selecionável -->
         <Style x:Key="OptionItem" TargetType="ListBoxItem">
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
-                        <Border x:Name="Root" CornerRadius="10" Padding="12,8" Margin="0,0,0,6" Background="{StaticResource Surface2}"
-                                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                        <Border x:Name="Root" CornerRadius="12" Padding="14,12" Margin="0,0,0,8" Background="{StaticResource Surface2}"
+                                BorderBrush="{StaticResource Surface2}" BorderThickness="1.5">
                             <StackPanel>
-                                <TextBlock Text="{Binding Name}" Foreground="{StaticResource Text}" FontSize="13" />
-                                <TextBlock Text="{Binding Detail}" Style="{StaticResource Label}" FontSize="11" />
+                                <TextBlock Text="{Binding Name}" Foreground="{StaticResource Text}" FontSize="14" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding Detail}" Style="{StaticResource Label}" Margin="0,2,0,0" />
                             </StackPanel>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -57,273 +56,289 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="CardTitle" TargetType="TextBlock" BasedOn="{StaticResource H2}">
+            <Setter Property="Margin" Value="0,0,0,14" />
+        </Style>
     </UserControl.Resources>
 
     <StackPanel Style="{StaticResource PageRoot}">
-        <DockPanel>
-            <Border DockPanel.Dock="Right" Style="{StaticResource Chip}" VerticalAlignment="Center" Margin="0,0,16,0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="&#xE9D9;" FontFamily="{StaticResource IconFont}" Foreground="{StaticResource Accent}" VerticalAlignment="Center" />
-                    <TextBlock Margin="8,0,0,0" Foreground="{StaticResource Text}" FontSize="12" VerticalAlignment="Center">
-                        <Run Text="{Binding ReportsPerSecond, Mode=OneWay}" /><Run Text=" relatórios/s" />
-                    </TextBlock>
-                </StackPanel>
-            </Border>
+        <!-- Cabeçalho: título + status em uma linha -->
+        <DockPanel Margin="0,0,16,0">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Style="{StaticResource Chip}" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="8" Height="8" Fill="{Binding StatusKind, Converter={StaticResource StatusBrush}}" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding StatusTitle}" Margin="8,0,0,0" FontSize="12" Foreground="{StaticResource Text}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Chip}" Margin="0" Visibility="{Binding IsLinked, Converter={StaticResource BoolVis}}">
+                    <TextBlock FontSize="12" Foreground="{StaticResource TextMuted}"><Run Text="{Binding ReportsPerSecond, Mode=OneWay}" /><Run Text=" Hz" /></TextBlock>
+                </Border>
+            </StackPanel>
             <StackPanel>
                 <TextBlock Text="Controle PS4" Style="{StaticResource H1}" />
-                <TextBlock Text="DualShock 4 via Bluetooth: entradas, bateria, luz e vibração." Style="{StaticResource Subtitle}" />
+                <TextBlock Text="{Binding StatusDescription}" Style="{StaticResource Subtitle}" Margin="0,4,0,20" />
             </StackPanel>
         </DockPanel>
 
-        <!-- Status -->
-        <Border Style="{StaticResource Card}" Padding="20,16">
-            <StackPanel Orientation="Horizontal">
-                <Border Width="40" Height="40" CornerRadius="20" Background="{StaticResource Surface2}">
-                    <TextBlock Text="{Binding StatusKind, Converter={StaticResource StatusGlyph}}" FontFamily="{StaticResource IconFont}" FontSize="16"
-                               Foreground="{Binding StatusKind, Converter={StaticResource StatusBrush}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                </Border>
-                <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding StatusTitle}" FontSize="16" FontWeight="SemiBold" Foreground="{Binding StatusKind, Converter={StaticResource StatusBrush}}" />
-                    <TextBlock Text="{Binding StatusDescription}" Style="{StaticResource Label}" FontSize="13" />
-                </StackPanel>
-            </StackPanel>
-        </Border>
-
-        <!-- Controle -->
-        <Border Style="{StaticResource Card}" Background="{StaticResource HeroGradient}" Padding="24,20">
-            <Grid>
-                <views:ControllerVisual IsPlayStation="True" />
-                <Border HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,4,0,0" Style="{StaticResource Chip}"
-                        Visibility="{Binding Touchpad, Converter={StaticResource BoolVis}}" Background="{StaticResource AccentGradient}">
-                    <TextBlock Text="Touchpad pressionado" Foreground="White" FontSize="12" FontWeight="SemiBold" />
-                </Border>
-            </Grid>
-        </Border>
-
-        <!-- Sensores: touchpad, movimento e alto-falante -->
-        <Border Style="{StaticResource Card}" BorderBrush="{StaticResource Warning}" Padding="18,12"
-                Visibility="{Binding SensorsAvailable, Converter={StaticResource BoolVis}, ConverterParameter=Invert}">
-            <TextBlock Style="{StaticResource Label}" FontSize="12.5" Foreground="{StaticResource Text}"
-                       Text="Touchpad e sensores de movimento precisam do relatório completo: conecte o cabo USB ou ligue &quot;Recursos avançados&quot; no Bluetooth." />
-        </Border>
-
-        <WrapPanel>
-            <!-- Touchpad -->
-            <Border Style="{StaticResource Card}" Width="380">
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
-                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xEFA5;" Style="{StaticResource IconGlyph}" /></Border>
-                        <TextBlock Text="Touchpad" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
-                    </StackPanel>
-                    <Border Width="320" Height="157" CornerRadius="12" Background="{StaticResource Surface2}" BorderThickness="2"
-                            HorizontalAlignment="Left" ClipToBounds="True">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="BorderBrush" Value="{StaticResource Surface3}" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Touchpad}" Value="True">
-                                        <Setter Property="BorderBrush" Value="{StaticResource Accent}" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                        <Canvas>
-                            <Line X1="160" Y1="0" X2="160" Y2="157" Stroke="{StaticResource Surface3}" StrokeDashArray="2 3" />
-                            <Ellipse Width="22" Height="22" Fill="{StaticResource AccentGradient}" Canvas.Left="{Binding Finger1Left}" Canvas.Top="{Binding Finger1Top}"
-                                     Visibility="{Binding Finger1Active, Converter={StaticResource BoolVis}}" />
-                            <Ellipse Width="22" Height="22" Fill="{StaticResource Success}" Canvas.Left="{Binding Finger2Left}" Canvas.Top="{Binding Finger2Top}"
-                                     Visibility="{Binding Finger2Active, Converter={StaticResource BoolVis}}" />
-                        </Canvas>
+        <TabControl Style="{StaticResource SegmentTabs}">
+            <!-- ================= VISÃO GERAL ================= -->
+            <TabItem Header="Visão geral">
+                <Grid Margin="0,0,16,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="280" />
+                    </Grid.ColumnDefinitions>
+                    <Border Style="{StaticResource Card}" Background="{StaticResource HeroGradient}" Padding="20" Margin="0,0,16,0">
+                        <Grid>
+                            <views:ControllerVisual IsPlayStation="True" />
+                            <Border HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource Chip}"
+                                    Visibility="{Binding Touchpad, Converter={StaticResource BoolVis}}" Background="{StaticResource AccentGradient}">
+                                <TextBlock Text="Touchpad" Foreground="White" FontSize="12" FontWeight="SemiBold" />
+                            </Border>
+                        </Grid>
                     </Border>
-                    <TextBlock Text="{Binding TouchText}" Style="{StaticResource Mono}" FontSize="12" Margin="0,10,0,4" />
-                    <TextBlock Style="{StaticResource Label}" Text="Deslize um ou dois dedos. A borda acende ao clicar o touchpad." />
-                </StackPanel>
-            </Border>
-
-            <!-- Movimento -->
-            <Border Style="{StaticResource Card}" Width="400">
-                <StackPanel>
-                    <DockPanel Margin="0,0,0,14">
-                        <Button DockPanel.Dock="Right" Content="Zerar posição" Command="{Binding ZeroTiltCommand}" Style="{StaticResource ActionButton}" Margin="0" Padding="12,6" />
-                        <StackPanel Orientation="Horizontal">
-                            <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE809;" Style="{StaticResource IconGlyph}" /></Border>
-                            <TextBlock Text="Giroscópio e acelerômetro" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </DockPanel>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <!-- Controle que inclina junto com o real -->
-                        <Border Width="140" Height="110" CornerRadius="12" Background="{StaticResource Surface2}">
-                            <Viewbox Width="110">
-                                <Canvas Width="640" Height="360">
-                                    <Canvas.RenderTransform>
-                                        <TransformGroup>
-                                            <ScaleTransform CenterX="320" CenterY="200" ScaleY="{Binding PitchScale}" />
-                                            <RotateTransform CenterX="320" CenterY="200" Angle="{Binding Roll}" />
-                                        </TransformGroup>
-                                    </Canvas.RenderTransform>
-                                    <Path Data="{StaticResource GamepadGeometry}" Fill="{StaticResource ControllerBodyBrush}" Stroke="{StaticResource AccentGradient}" StrokeThickness="8" />
-                                </Canvas>
-                            </Viewbox>
+                    <StackPanel Grid.Column="1">
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="BATERIA" Style="{StaticResource Overline}" />
+                                <TextBlock Text="{Binding BatteryTitle}" FontSize="34" FontWeight="SemiBold" Foreground="{StaticResource Text}" Margin="0,6,0,4" />
+                                <TextBlock Text="{Binding BatteryDetail}" Style="{StaticResource Label}" />
+                            </StackPanel>
                         </Border>
-                        <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                            <TextBlock Text="Rotação (giroscópio)" Style="{StaticResource Label}" Margin="0,0,0,6" />
-                            <DockPanel Margin="0,0,0,6"><TextBlock Text="X" Style="{StaticResource Label}" Width="14" /><ProgressBar Value="{Binding GyroXLevel, Mode=OneWay}" Style="{StaticResource TriggerBar}" /></DockPanel>
-                            <DockPanel Margin="0,0,0,6"><TextBlock Text="Y" Style="{StaticResource Label}" Width="14" /><ProgressBar Value="{Binding GyroYLevel, Mode=OneWay}" Style="{StaticResource TriggerBar}" /></DockPanel>
-                            <DockPanel Margin="0,0,0,10"><TextBlock Text="Z" Style="{StaticResource Label}" Width="14" /><ProgressBar Value="{Binding GyroZLevel, Mode=OneWay}" Style="{StaticResource TriggerBar}" /></DockPanel>
-                            <TextBlock Text="{Binding TiltText}" Style="{StaticResource Label}" Foreground="{StaticResource Text}" />
-                        </StackPanel>
-                    </Grid>
-                    <TextBlock Text="Giroscópio (bruto)" Style="{StaticResource Label}" Margin="0,14,0,0" />
-                    <TextBlock Text="{Binding GyroText}" Style="{StaticResource Mono}" FontSize="12" />
-                    <TextBlock Text="Acelerômetro (bruto)" Style="{StaticResource Label}" />
-                    <TextBlock Text="{Binding AccelText}" Style="{StaticResource Mono}" FontSize="12" Margin="0,2,0,6" />
-                    <TextBlock Style="{StaticResource Label}" FontSize="11.5" Text="Incline e gire o controle. Valores brutos, sem a calibração de fábrica: servem para testar se os sensores respondem." />
-                </StackPanel>
-            </Border>
+                        <Border Style="{StaticResource Card}" Margin="0">
+                            <StackPanel>
+                                <TextBlock Text="NOS JOGOS" Style="{StaticResource Overline}" />
+                                <TextBlock Text="{Binding SelectedMode.Name}" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource Text}" Margin="0,6,0,4" />
+                                <TextBlock Text="{Binding ModeText}" Style="{StaticResource Label}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
 
-            <!-- Alto-falante -->
-            <Border Style="{StaticResource Card}" Width="300">
+            <!-- ================= SENSORES ================= -->
+            <TabItem Header="Sensores">
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
-                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE767;" Style="{StaticResource IconGlyph}" /></Border>
-                        <TextBlock Text="Alto-falante" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                        <Ellipse Width="10" Height="10" Fill="{Binding SpeakerKind, Converter={StaticResource StatusBrush}}" VerticalAlignment="Top" Margin="0,5,0,0" />
-                        <TextBlock Text="{Binding SpeakerText}" Style="{StaticResource Value}" FontSize="13" Margin="10,0,0,0" MaxWidth="230" />
-                    </StackPanel>
-                    <Button Content="Verificar novamente" Command="{Binding CheckSpeakerCommand}" Style="{StaticResource ActionButton}" HorizontalAlignment="Left" />
-                </StackPanel>
-            </Border>
-        </WrapPanel>
+                    <TextBlock Style="{StaticResource Hint}" Margin="0,0,0,14" Foreground="{StaticResource Warning}"
+                               Visibility="{Binding SensorsAvailable, Converter={StaticResource BoolVis}, ConverterParameter=Invert}"
+                               Text="⚠ Conecte o cabo USB ou ligue Recursos avançados (aba Luz e vibração) para ler touchpad e sensores." />
+                    <WrapPanel>
+                        <!-- Touchpad -->
+                        <Border Style="{StaticResource Card}" Width="368">
+                            <StackPanel>
+                                <TextBlock Text="Touchpad" Style="{StaticResource CardTitle}" />
+                                <Border Width="320" Height="157" CornerRadius="12" Background="{StaticResource Surface2}" BorderThickness="2"
+                                        HorizontalAlignment="Left" ClipToBounds="True">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="BorderBrush" Value="{StaticResource Surface2}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Touchpad}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="{StaticResource Accent}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <Canvas>
+                                        <Ellipse Width="22" Height="22" Fill="{StaticResource AccentGradient}" Canvas.Left="{Binding Finger1Left}" Canvas.Top="{Binding Finger1Top}"
+                                                 Visibility="{Binding Finger1Active, Converter={StaticResource BoolVis}}" />
+                                        <Ellipse Width="22" Height="22" Fill="{StaticResource Success}" Canvas.Left="{Binding Finger2Left}" Canvas.Top="{Binding Finger2Top}"
+                                                 Visibility="{Binding Finger2Active, Converter={StaticResource BoolVis}}" />
+                                    </Canvas>
+                                </Border>
+                                <TextBlock Text="{Binding TouchText}" Style="{StaticResource Hint}" />
+                            </StackPanel>
+                        </Border>
 
-        <!-- Reconhecimento nos jogos -->
-        <Border Style="{StaticResource Card}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Margin="0,0,20,0">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE7FC;" Style="{StaticResource IconGlyph}" /></Border>
-                        <TextBlock Text="Como os jogos reconhecem o PS4" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
-                    </StackPanel>
-                    <ListBox ItemsSource="{Binding Modes}" SelectedItem="{Binding SelectedMode}" ItemContainerStyle="{StaticResource OptionItem}"
-                             Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+                        <!-- Movimento -->
+                        <Border Style="{StaticResource Card}" Width="368">
+                            <StackPanel>
+                                <DockPanel Margin="0,0,0,14">
+                                    <Button DockPanel.Dock="Right" Content="Zerar" Command="{Binding ZeroTiltCommand}" Style="{StaticResource ActionButton}" Margin="0" Padding="12,5" />
+                                    <TextBlock Text="Movimento" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
+                                </DockPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="140" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="130" Height="100" CornerRadius="12" Background="{StaticResource Surface2}" HorizontalAlignment="Left">
+                                        <Viewbox Width="100">
+                                            <Canvas Width="640" Height="360">
+                                                <Canvas.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform CenterX="320" CenterY="200" ScaleY="{Binding PitchScale}" />
+                                                        <RotateTransform CenterX="320" CenterY="200" Angle="{Binding Roll}" />
+                                                    </TransformGroup>
+                                                </Canvas.RenderTransform>
+                                                <Path Data="{StaticResource GamepadGeometry}" Fill="{StaticResource ControllerBodyBrush}" Stroke="{StaticResource AccentGradient}" StrokeThickness="10" />
+                                            </Canvas>
+                                        </Viewbox>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Margin="8,4,0,0">
+                                        <DockPanel Margin="0,0,0,8"><TextBlock Text="X" Style="{StaticResource Label}" Width="14" /><ProgressBar Value="{Binding GyroXLevel, Mode=OneWay}" Style="{StaticResource TriggerBar}" /></DockPanel>
+                                        <DockPanel Margin="0,0,0,8"><TextBlock Text="Y" Style="{StaticResource Label}" Width="14" /><ProgressBar Value="{Binding GyroYLevel, Mode=OneWay}" Style="{StaticResource TriggerBar}" /></DockPanel>
+                                        <DockPanel Margin="0,0,0,10"><TextBlock Text="Z" Style="{StaticResource Label}" Width="14" /><ProgressBar Value="{Binding GyroZLevel, Mode=OneWay}" Style="{StaticResource TriggerBar}" /></DockPanel>
+                                        <TextBlock Text="{Binding TiltText}" Style="{StaticResource Label}" Foreground="{StaticResource Text}" />
+                                    </StackPanel>
+                                </Grid>
+                                <Expander Header="Valores brutos" Style="{StaticResource Details}">
+                                    <StackPanel>
+                                        <TextBlock Text="Giroscópio" Style="{StaticResource Label}" />
+                                        <TextBlock Text="{Binding GyroText}" Style="{StaticResource Mono}" FontSize="12" Margin="0,2,0,8" />
+                                        <TextBlock Text="Acelerômetro" Style="{StaticResource Label}" />
+                                        <TextBlock Text="{Binding AccelText}" Style="{StaticResource Mono}" FontSize="12" Margin="0,2,0,6" />
+                                        <TextBlock Text="Sem calibração de fábrica: servem para ver se os sensores respondem." Style="{StaticResource Label}" FontSize="11" />
+                                    </StackPanel>
+                                </Expander>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Alto-falante -->
+                        <Border Style="{StaticResource Card}" Width="368">
+                            <StackPanel>
+                                <TextBlock Text="Áudio do controle" Style="{StaticResource CardTitle}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <Ellipse Width="8" Height="8" Fill="{Binding SpeakerKind, Converter={StaticResource StatusBrush}}" VerticalAlignment="Top" Margin="0,6,0,0" />
+                                    <TextBlock Text="{Binding SpeakerText}" Style="{StaticResource Label}" FontSize="12.5" Foreground="{StaticResource Text}" Margin="10,0,0,0" MaxWidth="300" />
+                                </StackPanel>
+                                <WrapPanel Margin="0,14,0,0">
+                                    <Button Content="Tocar som de teste" Command="{Binding PlayToneCommand}" IsEnabled="{Binding HasSpeaker}" Style="{StaticResource PrimaryButton}" />
+                                    <Button Command="{Binding ToggleMicrophoneCommand}" IsEnabled="{Binding HasMicrophone}">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource ActionButton}">
+                                                <Setter Property="Content" Value="Testar microfone" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding MicActive}" Value="True">
+                                                        <Setter Property="Content" Value="Parar microfone" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Button Content="Verificar novamente" Command="{Binding CheckSpeakerCommand}" Style="{StaticResource ActionButton}" />
+                                </WrapPanel>
+                                <StackPanel Visibility="{Binding MicActive, Converter={StaticResource BoolVis}}" Margin="0,6,0,0">
+                                    <TextBlock Text="Nível do microfone · fale perto do controle" Style="{StaticResource Label}" Margin="0,0,0,6" />
+                                    <ProgressBar Value="{Binding MicLevel, Mode=OneWay}" Style="{StaticResource TriggerBar}" Height="10" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </WrapPanel>
                 </StackPanel>
-                <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <Ellipse Width="10" Height="10" Fill="{Binding RecognitionKind, Converter={StaticResource StatusBrush}}" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding RecognitionText}" Style="{StaticResource Value}" Margin="10,0,0,0" MaxWidth="380" />
-                    </StackPanel>
-                    <Border Background="{StaticResource Surface2}" CornerRadius="10" Padding="12,10" Margin="0,0,0,12"
-                            Visibility="{Binding GameViewActive, Converter={StaticResource BoolVis}}">
+            </TabItem>
+
+            <!-- ================= LUZ E VIBRAÇÃO ================= -->
+            <TabItem Header="Luz e vibração">
+                <StackPanel>
+                    <Border Style="{StaticResource Card}" Padding="20,16">
                         <StackPanel>
-                            <TextBlock Text="O QUE O JOGO VÊ (Xbox virtual, lido pelo XInput)" Style="{StaticResource Overline}" Margin="0,0,0,6" />
-                            <TextBlock Text="{Binding GameViewButtons}" Style="{StaticResource Mono}" FontSize="12" Margin="0,0,0,2" />
-                            <TextBlock Text="{Binding GameViewSticks}" Style="{StaticResource Mono}" FontSize="12" Margin="0" />
+                            <DockPanel>
+                                <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Advanced}" Style="{StaticResource ToggleSwitch}" VerticalAlignment="Center" />
+                                <StackPanel>
+                                    <TextBlock Text="Recursos avançados" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource Text}" />
+                                    <TextBlock Text="Libera luz, vibração e, pelo Bluetooth, bateria e sensores." Style="{StaticResource Label}" />
+                                </StackPanel>
+                            </DockPanel>
+                            <Expander Header="O que muda ao ativar?" Style="{StaticResource Details}">
+                                <TextBlock Style="{StaticResource Label}" FontSize="12"
+                                           Text="Pelo Bluetooth o controle passa ao modo estendido até ser desligado. Jogos que o leem como controle genérico (DirectInput) podem parar de responder; para voltar, desligue e religue o PS4 (segure PS por 10 s). Pelo cabo nada muda." />
+                            </Expander>
                         </StackPanel>
                     </Border>
-                    <TextBlock Style="{StaticResource Label}" FontSize="11.5"
-                               Text="No modo Xbox, a vibração dos jogos volta para o PS4 (por cabo sempre; pelo Bluetooth só com &quot;Recursos avançados&quot;). Sem o HidHide, alguns jogos podem enxergar dois controles: o PS4 e o Xbox virtual. Se isso acontecer, desative o PS4 nas opções do jogo ou instale o HidHide." />
-                </StackPanel>
-            </Grid>
-        </Border>
 
-        <WrapPanel>
-            <!-- Recursos avançados -->
-            <Border Style="{StaticResource Card}" Width="340">
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
-                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE945;" Style="{StaticResource IconGlyph}" /></Border>
-                        <TextBlock Text="Recursos avançados" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
-                    </StackPanel>
-                    <CheckBox Content="Ativar bateria, luz e vibração" IsChecked="{Binding Advanced}" Style="{StaticResource ToggleSwitch}" Margin="0,0,0,12" />
-                    <TextBlock Text="Modo do controle" Style="{StaticResource Label}" />
-                    <TextBlock Text="{Binding ModeText}" Style="{StaticResource Value}" />
-                    <TextBlock Style="{StaticResource Label}" FontSize="11.5"
-                               Text="⚠️ Ativado, o controle passa ao modo estendido até ser desligado. Jogos que o leem como controle genérico (DirectInput) podem parar de responder; para voltar, desligue e religue o PS4 (segure PS por 10 s)." />
-                </StackPanel>
-            </Border>
+                    <WrapPanel IsEnabled="{Binding CanSend}">
+                        <!-- Luz -->
+                        <Border Style="{StaticResource Card}" Width="400">
+                            <StackPanel>
+                                <DockPanel Margin="0,0,0,16">
+                                    <Border DockPanel.Dock="Right" Width="56" Height="24" CornerRadius="12" Background="{Binding Preview}"
+                                            BorderBrush="{StaticResource Surface3}" BorderThickness="1" />
+                                    <TextBlock Text="Cor da luz" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
+                                </DockPanel>
+                                <WrapPanel Margin="0,0,0,6">
+                                    <Button Style="{StaticResource Swatch}" Background="#0050FF" Command="{Binding PresetCommand}" CommandParameter="0050FF" ToolTip="Azul PlayStation" />
+                                    <Button Style="{StaticResource Swatch}" Background="#9B6BFF" Command="{Binding PresetCommand}" CommandParameter="9B6BFF" ToolTip="Violeta Nova" />
+                                    <Button Style="{StaticResource Swatch}" Background="#FF2D55" Command="{Binding PresetCommand}" CommandParameter="FF2D55" ToolTip="Vermelho" />
+                                    <Button Style="{StaticResource Swatch}" Background="#00E070" Command="{Binding PresetCommand}" CommandParameter="00E070" ToolTip="Verde" />
+                                    <Button Style="{StaticResource Swatch}" Background="#FFB000" Command="{Binding PresetCommand}" CommandParameter="FFB000" ToolTip="Âmbar" />
+                                    <Button Style="{StaticResource Swatch}" Background="#00E5FF" Command="{Binding PresetCommand}" CommandParameter="00E5FF" ToolTip="Ciano" />
+                                    <Button Style="{StaticResource Swatch}" Background="#FFFFFF" Command="{Binding PresetCommand}" CommandParameter="FFFFFF" ToolTip="Branco" />
+                                </WrapPanel>
+                                <Expander Header="Cor personalizada" Style="{StaticResource Details}" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <DockPanel><TextBlock DockPanel.Dock="Right" Style="{StaticResource Label}" Text="{Binding LightR, StringFormat=0}" /><TextBlock Text="Vermelho" Style="{StaticResource Label}" /></DockPanel>
+                                        <Slider Minimum="0" Maximum="255" Value="{Binding LightR}" Margin="0,2,0,6" />
+                                        <DockPanel><TextBlock DockPanel.Dock="Right" Style="{StaticResource Label}" Text="{Binding LightG, StringFormat=0}" /><TextBlock Text="Verde" Style="{StaticResource Label}" /></DockPanel>
+                                        <Slider Minimum="0" Maximum="255" Value="{Binding LightG}" Margin="0,2,0,6" />
+                                        <DockPanel><TextBlock DockPanel.Dock="Right" Style="{StaticResource Label}" Text="{Binding LightB, StringFormat=0}" /><TextBlock Text="Azul" Style="{StaticResource Label}" /></DockPanel>
+                                        <Slider Minimum="0" Maximum="255" Value="{Binding LightB}" Margin="0,2,0,10" />
+                                        <Button Content="Aplicar cor" Command="{Binding ApplyLightCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left" />
+                                    </StackPanel>
+                                </Expander>
+                                <Button Content="Apagar luz" Command="{Binding LightOffCommand}" Style="{StaticResource ActionButton}" HorizontalAlignment="Left" />
+                            </StackPanel>
+                        </Border>
 
-            <!-- Bateria -->
-            <Border Style="{StaticResource Card}" Width="260">
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
-                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE996;" Style="{StaticResource IconGlyph}" /></Border>
-                        <TextBlock Text="Bateria" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
-                    </StackPanel>
-                    <TextBlock Text="{Binding BatteryTitle}" FontSize="30" FontWeight="SemiBold" Foreground="{StaticResource Text}" Margin="0,0,0,6" />
-                    <TextBlock Text="{Binding BatteryDetail}" Style="{StaticResource Label}" />
-                </StackPanel>
-            </Border>
+                        <!-- Vibração -->
+                        <Border Style="{StaticResource Card}" Width="340">
+                            <StackPanel>
+                                <TextBlock Text="Vibração" Style="{StaticResource CardTitle}" />
+                                <WrapPanel>
+                                    <Button Content="Esquerdo" Command="{Binding PulseCommand}" CommandParameter="left" Style="{StaticResource ActionButton}" />
+                                    <Button Content="Direito" Command="{Binding PulseCommand}" CommandParameter="right" Style="{StaticResource ActionButton}" />
+                                    <Button Content="Ambos" Command="{Binding PulseCommand}" CommandParameter="both" Style="{StaticResource PrimaryButton}" />
+                                </WrapPanel>
+                                <TextBlock Text="{Binding OutputStatus}" Style="{StaticResource Hint}" />
 
-            <!-- Luz -->
-            <Border Style="{StaticResource Card}" Width="380">
-                <StackPanel IsEnabled="{Binding CanSend}">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
-                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE781;" Style="{StaticResource IconGlyph}" /></Border>
-                        <TextBlock Text="Luz do controle" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
-                        <Border Width="44" Height="22" CornerRadius="11" Background="{Binding Preview}" Margin="14,0,0,0"
-                                BorderBrush="{StaticResource Surface3}" BorderThickness="1" VerticalAlignment="Center" />
-                    </StackPanel>
-                    <WrapPanel Margin="0,0,0,8">
-                        <Button Style="{StaticResource Swatch}" Background="#0050FF" Command="{Binding PresetCommand}" CommandParameter="0050FF" ToolTip="Azul PlayStation" />
-                        <Button Style="{StaticResource Swatch}" Background="#9B6BFF" Command="{Binding PresetCommand}" CommandParameter="9B6BFF" ToolTip="Violeta Nova" />
-                        <Button Style="{StaticResource Swatch}" Background="#FF0000" Command="{Binding PresetCommand}" CommandParameter="FF0000" ToolTip="Vermelho" />
-                        <Button Style="{StaticResource Swatch}" Background="#00FF40" Command="{Binding PresetCommand}" CommandParameter="00FF40" ToolTip="Verde" />
-                        <Button Style="{StaticResource Swatch}" Background="#FFB000" Command="{Binding PresetCommand}" CommandParameter="FFB000" ToolTip="Âmbar" />
-                        <Button Style="{StaticResource Swatch}" Background="#00E5FF" Command="{Binding PresetCommand}" CommandParameter="00E5FF" ToolTip="Ciano" />
-                        <Button Style="{StaticResource Swatch}" Background="#FFFFFF" Command="{Binding PresetCommand}" CommandParameter="FFFFFF" ToolTip="Branco" />
+                                <Expander Header="Diagnóstico do Bluetooth" Style="{StaticResource Details}"
+                                          Visibility="{Binding IsBluetooth, Converter={StaticResource BoolVis}}">
+                                    <StackPanel>
+                                        <TextBlock Text="Pelo cabo luz e vibração funcionam. Pelo Bluetooth o seu controle ainda não respondeu; teste um formato:" Style="{StaticResource Label}" Margin="0,0,0,8" />
+                                        <ListBox ItemsSource="{Binding Variants}" SelectedItem="{Binding SelectedVariant}" ItemContainerStyle="{StaticResource OptionItem}"
+                                                 Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+                                    </StackPanel>
+                                </Expander>
+                            </StackPanel>
+                        </Border>
                     </WrapPanel>
-                    <DockPanel><TextBlock DockPanel.Dock="Right" Style="{StaticResource Label}" Text="{Binding LightR, StringFormat=0}" /><TextBlock Text="Vermelho" Style="{StaticResource Label}" /></DockPanel>
-                    <Slider Minimum="0" Maximum="255" Value="{Binding LightR}" Margin="0,2,0,8" />
-                    <DockPanel><TextBlock DockPanel.Dock="Right" Style="{StaticResource Label}" Text="{Binding LightG, StringFormat=0}" /><TextBlock Text="Verde" Style="{StaticResource Label}" /></DockPanel>
-                    <Slider Minimum="0" Maximum="255" Value="{Binding LightG}" Margin="0,2,0,8" />
-                    <DockPanel><TextBlock DockPanel.Dock="Right" Style="{StaticResource Label}" Text="{Binding LightB, StringFormat=0}" /><TextBlock Text="Azul" Style="{StaticResource Label}" /></DockPanel>
-                    <Slider Minimum="0" Maximum="255" Value="{Binding LightB}" Margin="0,2,0,14" />
-                    <WrapPanel>
-                        <Button Content="Aplicar cor" Command="{Binding ApplyLightCommand}" Style="{StaticResource PrimaryButton}" />
-                        <Button Content="Apagar" Command="{Binding LightOffCommand}" Style="{StaticResource ActionButton}" />
-                    </WrapPanel>
+                    <TextBlock Style="{StaticResource Hint}" Margin="0,0,0,8" Visibility="{Binding CanSend, Converter={StaticResource BoolVis}, ConverterParameter=Invert}"
+                               Text="Ligue Recursos avançados (com o controle conectado) para mudar a luz e testar a vibração." />
                 </StackPanel>
-            </Border>
+            </TabItem>
 
-            <!-- Vibração -->
-            <Border Style="{StaticResource Card}" Width="300">
-                <StackPanel IsEnabled="{Binding CanSend}">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
-                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE877;" Style="{StaticResource IconGlyph}" /></Border>
-                        <TextBlock Text="Vibração" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
-                    </StackPanel>
-                    <WrapPanel>
-                        <Button Content="Esquerdo" Command="{Binding PulseCommand}" CommandParameter="left" Style="{StaticResource ActionButton}" />
-                        <Button Content="Direito" Command="{Binding PulseCommand}" CommandParameter="right" Style="{StaticResource ActionButton}" />
-                        <Button Content="Ambos" Command="{Binding PulseCommand}" CommandParameter="both" Style="{StaticResource ActionButton}" />
-                    </WrapPanel>
-                    <TextBlock Text="Pulso de 1,5 s. Útil para confirmar se os comandos chegam ao controle." Style="{StaticResource Label}" Margin="0,6,0,0" />
-                </StackPanel>
-            </Border>
+            <!-- ================= MODO NOS JOGOS ================= -->
+            <TabItem Header="Modo nos jogos">
+                <WrapPanel>
+                    <Border Style="{StaticResource Card}" Width="420">
+                        <StackPanel>
+                            <TextBlock Text="Como os jogos reconhecem o PS4" Style="{StaticResource CardTitle}" />
+                            <ListBox ItemsSource="{Binding Modes}" SelectedItem="{Binding SelectedMode}" ItemContainerStyle="{StaticResource OptionItem}"
+                                     Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                <Ellipse Width="8" Height="8" Fill="{Binding RecognitionKind, Converter={StaticResource StatusBrush}}" VerticalAlignment="Top" Margin="0,6,0,0" />
+                                <TextBlock Text="{Binding RecognitionText}" Style="{StaticResource Label}" Foreground="{StaticResource Text}" Margin="10,0,0,0" MaxWidth="350" />
+                            </StackPanel>
+                            <Expander Header="Detalhes do modo Xbox" Style="{StaticResource Details}">
+                                <TextBlock Style="{StaticResource Label}" FontSize="12"
+                                           Text="O app cria um Xbox 360 virtual e aplica o perfil ativo. A vibração dos jogos volta ao PS4 (pelo cabo sempre; pelo Bluetooth só com Recursos avançados). Sem o HidHide, alguns jogos podem ver dois controles." />
+                            </Expander>
+                        </StackPanel>
+                    </Border>
 
-            <!-- Diagnóstico (só Bluetooth: por USB o formato não importa) -->
-            <Border Style="{StaticResource Card}" Width="380" Visibility="{Binding IsBluetooth, Converter={StaticResource BoolVis}}">
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE9D9;" Style="{StaticResource IconGlyph}" /></Border>
-                        <TextBlock Text="Formato de envio (diagnóstico)" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
-                    </StackPanel>
-                    <TextBlock Style="{StaticResource Label}" Margin="0,0,0,10"
-                               Text="Por cabo USB, luz e vibração já funcionam. Pelo Bluetooth seu controle ainda não respondeu: escolha um formato e teste." />
-                    <ListBox ItemsSource="{Binding Variants}" SelectedItem="{Binding SelectedVariant}" ItemContainerStyle="{StaticResource OptionItem}"
-                             Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
-                    <TextBlock Text="{Binding OutputStatus}" Style="{StaticResource Label}" Margin="0,8,0,0" Foreground="{StaticResource Text}" />
-                </StackPanel>
-            </Border>
-        </WrapPanel>
+                    <Border Style="{StaticResource Card}" Width="360" Visibility="{Binding GameViewActive, Converter={StaticResource BoolVis}}">
+                        <StackPanel>
+                            <TextBlock Text="O que o jogo vê" Style="{StaticResource CardTitle}" />
+                            <TextBlock Text="BOTÕES" Style="{StaticResource Overline}" />
+                            <TextBlock Text="{Binding GameViewButtons}" Style="{StaticResource Mono}" FontSize="12" Margin="0,4,0,12" />
+                            <TextBlock Text="ANALÓGICOS E GATILHOS" Style="{StaticResource Overline}" />
+                            <TextBlock Text="{Binding GameViewSticks}" Style="{StaticResource Mono}" FontSize="12" Margin="0,4,0,0" />
+                        </StackPanel>
+                    </Border>
+                </WrapPanel>
+            </TabItem>
+        </TabControl>
     </StackPanel>
 </UserControl>

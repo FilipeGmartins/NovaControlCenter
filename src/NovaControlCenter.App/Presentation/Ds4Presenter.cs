@@ -1,4 +1,5 @@
-﻿using NovaControlCenter.Infrastructure.Ds4;
+﻿using NovaControlCenter.Infrastructure.Audio;
+using NovaControlCenter.Infrastructure.Ds4;
 
 namespace NovaControlCenter.App.Presentation;
 
@@ -50,5 +51,20 @@ public static class Ds4Presenter
             return (StatusKind.Warning, "Criando o Xbox virtual…");
         var slot = s.VirtualSlot is int i ? $" (posição XInput {i + 1} de 4)" : "";
         return (StatusKind.Ok, $"Xbox 360 virtual ativo{slot}. Jogos XInput já recebem os comandos do PS4.");
+    }
+
+    /// <summary>Texto do cartão de áudio do controle.</summary>
+    public static (StatusKind Kind, string Text) Audio(ControllerAudioEndpoints e, bool bluetooth)
+    {
+        if (e.Speaker is not null || e.Microphone is not null)
+        {
+            var parts = new List<string>();
+            if (e.Speaker is { } s) parts.Add($"alto-falante \"{s.Name}\"");
+            if (e.Microphone is { } m) parts.Add($"microfone \"{m.Name}\"");
+            return (StatusKind.Ok, "Encontrado: " + string.Join(" e ", parts) + ".");
+        }
+        return (StatusKind.Warning, bluetooth
+            ? "Pelo Bluetooth o áudio do DS4 usa um formato proprietário que o Windows não suporta. Conecte o cabo USB para verificar."
+            : "Este controle não expõe alto-falante nem microfone ao Windows: pelo cabo ele aparece só como controle (HID). No DS4 original, surgem os dispositivos \"Wireless Controller\".");
     }
 }

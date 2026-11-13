@@ -236,6 +236,12 @@ Decisão: o cartão "Alto-falante" **detecta** a saída de áudio do controle (W
 | Entradas do PS4 → Xbox virtual | ✅ confirmado pelo usuário no painel "O que o jogo vê" (lê o slot virtual via XInput). O teste anterior com hora marcada (0 de 15 botões) foi atribuído a botões apertados fora da janela de 25 s |
 | Duplicidade | ⚠️ como esperado sem HidHide, o WinRT lista o DS4 **e** o Xbox virtual |
 
+### 3.10.9 Áudio do controle (alto-falante e microfone) — preparado para DS4 original — 2026-11-13
+- **Implementação:** WASAPI via NAudio (MIT). O app procura os dispositivos ativos cujo nome contém "Wireless Controller" ou "DUALSHOCK" (saída e entrada), toca um tom de 440 Hz e mede o pico do microfone.
+- **Validação do mecanismo** com `nova-probe audio-test --name Realtek` (dispositivos do PC): ✅ tom reproduzido até o fim no "Alto-falantes (Realtek(R) Audio)" (0,4 s, 801 ms incluindo a abertura); ✅ captura do "Grupo de microfones (Realtek(R) Audio)" funcionando (ruído ambiente ~0,003).
+- **Controle do usuário:** `nova-probe audio-test` → nenhuma saída nem entrada do controle (coerente com §3.10.7). Na interface, os botões ficam desabilitados e o motivo é explicado.
+- ⚠️ **Não validado em hardware real:** a detecção pelos nomes "Wireless Controller"/"DUALSHOCK" num DS4 original. Ela é coberta por testes automatizados (busca, maiúsculas/minúsculas, ausência) e a parte de tocar/captar foi validada em outros dispositivos.
+
 ## 4. Conclusão sobre a bateria (decisão S1-09)
 
 | Fonte | Resultado |

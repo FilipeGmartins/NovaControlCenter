@@ -46,6 +46,7 @@ Status: ⬜ a fazer · 🔄 em andamento · ✅ feito · ⛔ bloqueado (aguarda 
 | S4-06 | Teste manual de botões (cobertura "X de 15") e de vibração por motor na tela de Monitoramento | P1 | 🔄 em validação |
 | S4-07 | Modernização visual: janela própria, desenho do controle, novos componentes | P1 | ✅ |
 | S4-08 | Validar convivência com outro controle (DS4 via Bluetooth, com e sem DS4Windows/ViGEm) | P2 | ✅ (sem DS4Windows) |
+| S4-09 | Reduzir a poluição visual: abas na página PS4, detalhes técnicos recolhidos | P1 | ✅ |
 | S4-05 | Notificação de bateria baixa (toast do Windows + ícone na bandeja) | P1 | ⛔ sem fonte de bateria |
 
 ## Épico DS4 — Suporte ao DualShock 4 (prioridade sobre a Sprint 05, por decisão do usuário)
@@ -61,7 +62,7 @@ Status: ⬜ a fazer · 🔄 em andamento · ✅ feito · ⛔ bloqueado (aguarda 
 | D4-08 | Bluetooth: luz e vibração não chegam ao controle do usuário (USB funciona). Investigar caminho de saída BT no Windows | P2 | ⬜ |
 | D4-09 | Silhueta própria do DS4 (analógicos simétricos embaixo) | P3 | ⬜ |
 | D4-10 | Persistir "Recursos avançados" e a última cor entre sessões | P2 | ✅ (+ modo de reconhecimento e formato de envio) |
-| D4-11 | Tocar som de teste no alto-falante do DS4 (exige controle com saída de áudio USB; o do usuário não tem) | P3 | ⬜ |
+| D4-11 | Tocar som de teste no alto-falante do DS4 (exige controle com saída de áudio USB; o do usuário não tem) | P3 | ✅ implementado (tom + medidor de microfone); mecanismo validado com o áudio do PC; aguarda DS4 original para validação final |
 | D4-12 | Touchpad e sensores de movimento (giroscópio/acelerômetro) na página PS4 | P1 | ✅ |
 | D4-13 | Calibração de fábrica do giroscópio (feature 0x02/0x05) para mostrar °/s reais | P3 | ⬜ |
 

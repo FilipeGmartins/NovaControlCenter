@@ -7,6 +7,7 @@ using NovaControlCenter.App.Presentation;
 using NovaControlCenter.App.Services;
 using NovaControlCenter.Core.Interfaces;
 using NovaControlCenter.Core.Models;
+using NovaControlCenter.Infrastructure.Audio;
 using NovaControlCenter.Infrastructure.Ds4;
 
 namespace NovaControlCenter.App.ViewModels;
@@ -26,7 +27,9 @@ public sealed partial class Ds4ViewModel : ObservableObject
     private const double FingerSize = 22;
 
     private readonly IDs4Controller _ds4;
-    private readonly Func<Task<string?>> _findSpeaker;
+    private readonly IControllerAudio? _audio;
+    private ControllerAudioEndpoints _endpoints = new(null, null);
+    private IMicrophoneMeter? _meter;
     private readonly IInputReader? _xinput;
     private readonly ISettingsStore? _settings;
     private bool _loading = true;
@@ -102,18 +105,23 @@ public sealed partial class Ds4ViewModel : ObservableObject
     // ===== Alto-falante =====
     [ObservableProperty] private StatusKind _speakerKind = StatusKind.Warning;
     [ObservableProperty] private string _speakerText = "Ainda não verificado.";
+    [ObservableProperty] private bool _hasSpeaker;
+    [ObservableProperty] private bool _hasMicrophone;
+    [ObservableProperty] private bool _micActive;
+    [ObservableProperty] private double _micLevel;
+    [ObservableProperty] private bool _tonePlaying;
 
     // ===== O que o jogo vê (Xbox virtual lido pelo XInput) =====
     [ObservableProperty] private bool _gameViewActive;
     [ObservableProperty] private string _gameViewButtons = Presenter.Dash;
     [ObservableProperty] private string _gameViewSticks = Presenter.Dash;
 
-    public Ds4ViewModel(IDs4Controller ds4, IInputReader? xinput = null, Func<Task<string?>>? findSpeaker = null, ISettingsStore? settings = null)
+    public Ds4ViewModel(IDs4Controller ds4, IInputReader? xinput = null, IControllerAudio? audio = null, ISettingsStore? settings = null)
     {
         _xinput = xinput;
         _settings = settings;
         _ds4 = ds4 ?? throw new ArgumentNullException(nameof(ds4));
-        _findSpeaker = findSpeaker ?? Ds4Speaker.FindOutputAsync;
+        _audio = audio;
         _selectedVariant = Variants[0];
         _selectedMode = Modes.First(m => m.Value == ds4.Mode);
         _advanced = ds4.AdvancedEnabled;
@@ -212,6 +220,7 @@ public sealed partial class Ds4ViewModel : ObservableObject
         }
 
         IsBluetooth = s.IsBluetooth;
+        if (_meter is not null) MicLevel = _meter.Level;
         RefreshGameView(s);
         IsActive = s.Link == Ds4LinkState.Connected && s.Input is not null;
         if (s.Input is null || s.Input.State.PacketNumber == _lastPacket) return;
@@ -292,21 +301,68 @@ public sealed partial class Ds4ViewModel : ObservableObject
     [RelayCommand]
     private async Task CheckSpeakerAsync()
     {
+        if (_audio is null)
+        {
+            (SpeakerKind, SpeakerText) = (StatusKind.Warning, "Verificação de áudio indisponível.");
+            return;
+        }
         try
         {
-            var output = await _findSpeaker();
-            (SpeakerKind, SpeakerText) = output is null
-                ? (StatusKind.Warning, IsBluetooth
-                    ? "Pelo Bluetooth, o áudio do DS4 usa um formato proprietário que o Windows não suporta. Conecte o cabo USB para verificar."
-                    : "Este controle não expõe alto-falante ao Windows: pelo cabo ele aparece só como controle (HID), sem dispositivo de áudio. No DS4 original, surge a saída \"Wireless Controller\".")
-                : (StatusKind.Ok, $"Saída de áudio encontrada: \"{output}\". Para testar, escolha-a em Configurações de som do Windows e toque qualquer áudio.");
+            var audio = _audio;
+            _endpoints = await Task.Run(() => audio.Find());
+            HasSpeaker = _endpoints.Speaker is not null;
+            HasMicrophone = _endpoints.Microphone is not null;
+            (SpeakerKind, SpeakerText) = Presentation.Ds4Presenter.Audio(_endpoints, IsBluetooth);
         }
         catch (Exception ex) when (ex is not OutOfMemoryException)
         {
-            (SpeakerKind, SpeakerText) = (StatusKind.Error, $"Não foi possível consultar as saídas de áudio ({ex.GetType().Name}).");
+            (SpeakerKind, SpeakerText) = (StatusKind.Error, $"Não foi possível consultar os dispositivos de áudio ({ex.GetType().Name}).");
         }
     }
 
+    /// <summary>Tom de teste de 1 s no alto-falante do controle.</summary>
+    [RelayCommand]
+    private async Task PlayToneAsync()
+    {
+        if (_audio is null || _endpoints.Speaker is not { } speaker || TonePlaying) return;
+        TonePlaying = true;
+        try
+        {
+            await _audio.PlayToneAsync(speaker, 440, 1.0, 0.3f);
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException)
+        {
+            (SpeakerKind, SpeakerText) = (StatusKind.Error, $"Falha ao tocar o som de teste ({ex.GetType().Name}).");
+        }
+        finally
+        {
+            TonePlaying = false;
+        }
+    }
+
+    /// <summary>Liga/desliga o medidor do microfone do controle.</summary>
+    [RelayCommand]
+    private void ToggleMicrophone()
+    {
+        if (_meter is not null)
+        {
+            _meter.Dispose();
+            _meter = null;
+            MicActive = false;
+            MicLevel = 0;
+            return;
+        }
+        if (_audio is null || _endpoints.Microphone is not { } mic) return;
+        try
+        {
+            _meter = _audio.StartMeter(mic);
+            MicActive = true;
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException)
+        {
+            (SpeakerKind, SpeakerText) = (StatusKind.Error, $"Falha ao abrir o microfone ({ex.GetType().Name}).");
+        }
+    }
     [RelayCommand]
     private void Preset(string hex)
     {
