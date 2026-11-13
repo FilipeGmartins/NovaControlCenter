@@ -1,0 +1,16 @@
+﻿<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <!-- TFM Windows com SDK do Win10: libera WinRT (Windows.Gaming.Input) mantendo compatibilidade com Win10 1809+ -->
+    <NovaWindowsTfm>net8.0-windows10.0.19041.0</NovaWindowsTfm>
+    <SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('-windows'))">10.0.17763.0</SupportedOSPlatformVersion>
+    <Version>0.1.0</Version>
+    <Company>Nova Control Center</Company>
+    <Product>Nova Control Center</Product>
+  </PropertyGroup>
+</Project>

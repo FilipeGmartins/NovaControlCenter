@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(NovaWindowsTfm)</TargetFramework>
+    <!-- Exigido pelo gerador do LibraryImport (P/Invoke XInput) -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="NovaControlCenter.Tests" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NovaControlCenter.Core\NovaControlCenter.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="HidSharp" Version="2.6.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
+    <PackageReference Include="Nefarius.ViGEm.Client" Version="1.21.256" />
+  </ItemGroup>
+</Project>

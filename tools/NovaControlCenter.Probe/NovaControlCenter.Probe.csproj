@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Ferramenta de diagnóstico da Sprint 01. SOMENTE LEITURA: não envia relatórios de saída/feature ao dispositivo. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>$(NovaWindowsTfm)</TargetFramework>
+    <AssemblyName>nova-probe</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NovaControlCenter.Core\NovaControlCenter.Core.csproj" />
+    <ProjectReference Include="..\..\src\NovaControlCenter.Infrastructure\NovaControlCenter.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
