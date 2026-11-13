@@ -56,6 +56,10 @@ Clean Architecture em 3 camadas + testes. A dependência aponta sempre para dent
 | ADR-24 | Modo XInput do DS4 via `Nefarius.ViGEm.Client` (MIT) sobre o ViGEmBus já instalado; o app não instala drivers | Sem dependência nova de driver; o risco de manutenção (projeto arquivado) está documentado |
 | ADR-25 | Preferências em `%AppData%\NovaControlCenter\settings.json` via `ISettingsStore` (Core) / `JsonSettingsStore` (Infrastructure): gravação atômica (temp + troca), campo `Version` para migração e backup automático se o arquivo estiver corrompido | Persistência simples, sem banco, resistente a quedas; o Core continua sem dependências |
 | ADR-26 | A cor salva do PS4 é reaplicada a cada conexão **só** com "Recursos avançados" ligado | Mantém a decisão 1 do PRODUCT: nada é enviado ao controle sem permissão explícita |
+| ADR-27 | `InputProcessor` puro no Core: zona morta **radial com reescala** (sem degrau na borda), curva de potência, gatilho com zona morta e "completo em" | Matemática testável; o mesmo código serve à prévia e ao controle virtual |
+| ADR-28 | `ProfileService` no Core concentra as regras (nome obrigatório, único, até 40 caracteres; Padrão não exclui) e persiste via `ISettingsStore` | Regras num lugar só; as telas só exibem o resultado |
+| ADR-29 | Perfis só são aplicados onde o app gera a saída (PS4 → Xbox virtual). A página Configurações deixa claro o que é pré-visualização | Coerente com a regra de não apresentar ajuste de software como efeito real quando não é |
+| ADR-30 | Sliders gravam com atraso de 300 ms após o último ajuste; a prévia usa o rascunho na hora | Evita gravar o arquivo dezenas de vezes por segundo ao arrastar |
 
 ## 3. Identificação do controle
 

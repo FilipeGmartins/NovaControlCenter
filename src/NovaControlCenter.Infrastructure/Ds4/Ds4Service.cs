@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using NovaControlCenter.Core.Models;
+using NovaControlCenter.Core.Services;
 using NovaControlCenter.Infrastructure.Virtual;
 
 namespace NovaControlCenter.Infrastructure.Ds4;
@@ -128,6 +130,12 @@ public sealed partial class Ds4Service : IDs4Controller, IDisposable
         }
     }
 
+    /// <summary>
+    /// Perfil ativo (Sprint 05). Aplicado às entradas enviadas ao Xbox virtual e à vibração pedida pelos jogos.
+    /// Null = sem processamento.
+    /// </summary>
+    public Func<InputProfile>? ProfileProvider { get; set; }
+
     public void Start() => _loop ??= Task.Factory.StartNew(() => Run(_cts.Token), TaskCreationOptions.LongRunning);
 
     public bool SetLight(Ds4Color color, Ds4OutputVariant variant)
@@ -164,8 +172,15 @@ public sealed partial class Ds4Service : IDs4Controller, IDisposable
         return ok;
     }
 
+    private int _disposed;
+
+    /// <summary>
+    /// Idempotente: o container registra a mesma instância como <see cref="Ds4Service"/> e <see cref="IDs4Controller"/>
+    /// e descarta as duas (antes isso lançava ObjectDisposedException ao fechar o app).
+    /// </summary>
     public void Dispose()
     {
+        if (Interlocked.Exchange(ref _disposed, 1) == 1) return;
         _cts.Cancel();
         try { _loop?.Wait(TimeSpan.FromSeconds(3)); }
         catch (AggregateException) { /* encerramento */ }
@@ -315,8 +330,13 @@ public sealed partial class Ds4Service : IDs4Controller, IDisposable
                 pad = _virtualPad;
             }
         }
-        if (pad is null) ReleaseVirtualPad(onlyIfModeChanged: true);
-        else pad.Update(input.State);
+        if (pad is null)
+        {
+            ReleaseVirtualPad(onlyIfModeChanged: true);
+            return;
+        }
+        var profile = ProfileProvider?.Invoke();
+        pad.Update(profile is null ? input.State : InputProcessor.Apply(input.State, profile));
     }
 
     private void ReleaseVirtualPad(bool onlyIfModeChanged = false)
@@ -347,12 +367,18 @@ public sealed partial class Ds4Service : IDs4Controller, IDisposable
         {
             conn = _current.Link == Ds4LinkState.Connected ? _connection : null;
             if (conn is null || (conn.IsBluetooth && !_advanced)) return;
-            if (_rumbleLeft == e.Large && _rumbleRight == e.Small) return;
             light = _lastLight;
             variant = _lastVariant;
         }
-        if (Send(conn, light, e.Large, e.Small, includeRumble: true, variant))
-            lock (_gate) (_rumbleLeft, _rumbleRight) = (e.Large, e.Small);
+        var profile = ProfileProvider?.Invoke();
+        var large = profile is null ? e.Large : InputProcessor.Vibration(e.Large, profile);
+        var small = profile is null ? e.Small : InputProcessor.Vibration(e.Small, profile);
+        lock (_gate)
+        {
+            if (_rumbleLeft == large && _rumbleRight == small) return; // nada mudou
+        }
+        if (Send(conn, light, large, small, includeRumble: true, variant))
+            lock (_gate) (_rumbleLeft, _rumbleRight) = (large, small);
     }
 
     private Ds4Connection? EnsureConnection()

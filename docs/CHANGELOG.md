@@ -4,6 +4,18 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). 
 
 ## [Não lançado]
 
+### Sprint 05 — Configurações e perfis (2026-11-13)
+#### Adicionado
+- `InputProfile` (analógicos: zona morta + curva; gatilhos: zona morta + ""completo em""; intensidade da vibração) e perfis iniciais **Padrão**, **FPS** e **Corrida**.
+- `InputProcessor`: zona morta radial com reescala, curva de sensibilidade, gatilho curto e vibração proporcional.
+- `ProfileService`: criar (a partir do ativo), duplicar, renomear, excluir (Padrão protegido), editar e ativar, com validação de nome e persistência no `settings.json`.
+- **Página Configurações**: sliders por analógico, gatilhos e vibração, aviso de onde os ajustes valem e **pré-visualização ao vivo** (bruto × com perfil) usando o PS4 ou o GameSir.
+- **Página Perfis**: cartões com resumo, selo ""ATIVO"", ativar, duplicar, excluir com confirmação, criar e renomear, com mensagens de erro claras.
+- **O perfil ativo vale nos jogos para o PS4 no modo Xbox** (entradas e vibração).
+- 29 novos testes (167 no total).
+#### Corrigido
+- **Erro ao fechar o app**: o `Ds4Service` era descartado duas vezes (registrado como serviço e como interface) e lançava `ObjectDisposedException`. `Dispose` agora é idempotente.
+
 ### D4-10 — Preferências salvas (2026-11-13)
 #### Adicionado
 - `ISettingsStore` + `JsonSettingsStore`: `%AppData%\NovaControlCenter\settings.json` com gravação atômica, versão de formato e backup `settings.json.corrompido-*` se o arquivo estiver inválido.

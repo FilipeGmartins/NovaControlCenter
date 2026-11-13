@@ -485,3 +485,7 @@ $RECYCLE.BIN/
 
 # Saída do nova-probe (pode conter seriais de dispositivos)
 probe-reports/
+
+# A regra *.app (pacotes macOS) casa com a pasta NovaControlCenter.App no Windows (sem diferenciar maiúsculas).
+# Reincluir o projeto da interface; bin/ e obj/ continuam ignorados pelas regras acima.
+!/src/NovaControlCenter.App/

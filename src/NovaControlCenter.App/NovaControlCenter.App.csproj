@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>$(NovaWindowsTfm)</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <!-- LibraryImport (barra de título escura via dwmapi) -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>NovaControlCenter</AssemblyName>
+    <!-- CA1822: propriedades de ViewModel precisam ser de instância para o binding do XAML -->
+    <NoWarn>$(NoWarn);CA1822</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NovaControlCenter.Core\NovaControlCenter.Core.csproj" />
+    <ProjectReference Include="..\NovaControlCenter.Infrastructure\NovaControlCenter.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+  </ItemGroup>
+</Project>

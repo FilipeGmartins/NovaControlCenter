@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="NovaControlCenter.App.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:conv="clr-namespace:NovaControlCenter.App.Converters">
+    <UserControl.Resources>
+        <conv:StatusKindToBrushConverter x:Key="StatusBrush" />
+        <conv:StatusKindToGlyphConverter x:Key="StatusGlyph" />
+    </UserControl.Resources>
+
+    <StackPanel Style="{StaticResource PageRoot}">
+        <TextBlock Text="Dashboard" Style="{StaticResource H1}" />
+        <TextBlock Text="Visão geral do seu controle, atualizada automaticamente." Style="{StaticResource Subtitle}" />
+
+        <!-- ===== Destaque ===== -->
+        <Border Style="{StaticResource Card}" Background="{StaticResource HeroGradient}" Padding="32,28" MinHeight="240">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel VerticalAlignment="Center">
+                    <!-- Pílula de status -->
+                    <Border Style="{StaticResource Chip}" HorizontalAlignment="Left" Margin="0,0,0,16">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding StatusKind, Converter={StaticResource StatusGlyph}}" FontFamily="{StaticResource IconFont}" FontSize="11"
+                                       Foreground="{Binding StatusKind, Converter={StaticResource StatusBrush}}" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding StatusTitle}" Margin="8,0,0,0" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{Binding StatusKind, Converter={StaticResource StatusBrush}}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="GameSir T4 Nova Lite" FontSize="32" FontWeight="SemiBold" Foreground="{StaticResource Text}" />
+                    <TextBlock Text="{Binding StatusDescription}" FontSize="14" Foreground="{StaticResource TextMuted}" TextWrapping="Wrap"
+                               Margin="0,6,0,20" MaxWidth="520" HorizontalAlignment="Left" />
+
+                    <WrapPanel>
+                        <Border Style="{StaticResource Chip}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE88E;" FontFamily="{StaticResource IconFont}" Foreground="{StaticResource Accent}" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding ConnectionType}" Margin="8,0,0,0" FontSize="12" Foreground="{StaticResource Text}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource Chip}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE916;" FontFamily="{StaticResource IconFont}" Foreground="{StaticResource Accent}" VerticalAlignment="Center" />
+                                <TextBlock Margin="8,0,0,0" FontSize="12" Foreground="{StaticResource Text}"><Run Text="Conectado há " /><Run Text="{Binding ConnectedFor, Mode=OneWay}" /></TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </WrapPanel>
+                </StackPanel>
+
+                <!-- Ilustração -->
+                <Viewbox Grid.Column="1" Width="300" Margin="24,0,0,0" VerticalAlignment="Center">
+                    <Canvas Width="640" Height="360">
+                        <Path Data="{StaticResource GamepadGeometry}" Fill="{StaticResource ControllerBodyBrush}" Stroke="{StaticResource AccentGradient}" StrokeThickness="3">
+                            <Path.Effect>
+                                <DropShadowEffect Color="{StaticResource AccentColor}" BlurRadius="70" ShadowDepth="0" Opacity="0.45" />
+                            </Path.Effect>
+                        </Path>
+                        <Ellipse Canvas.Left="140" Canvas.Top="105" Width="70" Height="70" Stroke="{StaticResource Surface3}" StrokeThickness="3" Fill="{StaticResource Surface2}" />
+                        <Ellipse Canvas.Left="360" Canvas.Top="177" Width="70" Height="70" Stroke="{StaticResource Surface3}" StrokeThickness="3" Fill="{StaticResource Surface2}" />
+                        <Ellipse Canvas.Left="449" Canvas.Top="90" Width="30" Height="30" Fill="{StaticResource Surface3}" />
+                        <Ellipse Canvas.Left="417" Canvas.Top="124" Width="30" Height="30" Fill="{StaticResource Surface3}" />
+                        <Ellipse Canvas.Left="481" Canvas.Top="124" Width="30" Height="30" Fill="{StaticResource Surface3}" />
+                        <Ellipse Canvas.Left="449" Canvas.Top="158" Width="30" Height="30" Fill="{StaticResource Surface3}" />
+                        <Path Data="M 233,175 h 24 v 24 h 24 v 24 h -24 v 24 h -24 v -24 h -24 v -24 h 24 Z" Fill="{StaticResource Surface3}" />
+                        <Ellipse Canvas.Left="304" Canvas.Top="86" Width="32" Height="32" Fill="{StaticResource AccentGradient}" Opacity="0.85" />
+                    </Canvas>
+                </Viewbox>
+            </Grid>
+        </Border>
+
+        <!-- ===== Detalhes ===== -->
+        <WrapPanel>
+            <!-- Conexão -->
+            <Border Style="{StaticResource Card}" Width="282">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE839;" Style="{StaticResource IconGlyph}" /></Border>
+                        <TextBlock Text="Conexão" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBlock Text="Receptor (VID:PID)" Style="{StaticResource Label}" />
+                    <TextBlock Text="{Binding Receiver}" Style="{StaticResource Value}" />
+                    <TextBlock Text="Posição XInput" Style="{StaticResource Label}" />
+                    <TextBlock Text="{Binding Slot}" Style="{StaticResource Value}" Margin="0,2,0,0" />
+                </StackPanel>
+            </Border>
+
+            <!-- Dispositivo -->
+            <Border Style="{StaticResource Card}" Width="282">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE7FC;" Style="{StaticResource IconGlyph}" /></Border>
+                        <TextBlock Text="Dispositivo" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBlock Text="Nome" Style="{StaticResource Label}" />
+                    <TextBlock Text="{Binding DeviceName}" Style="{StaticResource Value}" />
+                    <TextBlock Text="Identificação do modelo" Style="{StaticResource Label}" />
+                    <TextBlock Text="{Binding ModelNote}" Style="{StaticResource Value}" Margin="0,2,0,0" />
+                </StackPanel>
+            </Border>
+
+            <!-- Bateria -->
+            <Border Style="{StaticResource Card}" Width="282">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE996;" Style="{StaticResource IconGlyph}" Foreground="{StaticResource TextMuted}" /></Border>
+                        <TextBlock Text="Bateria" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBlock Text="{Binding BatteryTitle}" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}" Margin="0,0,0,6" />
+                    <TextBlock Text="{Binding BatteryDetail}" Style="{StaticResource Label}" FontSize="12.5" />
+                </StackPanel>
+            </Border>
+        </WrapPanel>
+    </StackPanel>
+</UserControl>

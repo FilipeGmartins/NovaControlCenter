@@ -1,0 +1,47 @@
+<UserControl x:Class="NovaControlCenter.App.Views.AboutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel Style="{StaticResource PageRoot}">
+        <TextBlock Text="Sobre" Style="{StaticResource H1}" />
+        <TextBlock Style="{StaticResource Subtitle}">
+            <Run Text="Nova Control Center — versão" /> <Run Text="{Binding Version, Mode=OneWay}" />
+        </TextBlock>
+
+        <WrapPanel>
+            <Border Style="{StaticResource Card}" Width="520">
+                <StackPanel>
+                    <TextBlock Text="Como este software funciona" Style="{StaticResource H2}" />
+                    <ItemsControl ItemsSource="{Binding Facts}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel Margin="0,0,0,10">
+                                    <TextBlock DockPanel.Dock="Left" Text="&#xE73E;" FontFamily="{StaticResource IconFont}"
+                                               Foreground="{StaticResource Success}" Margin="0,3,10,0" />
+                                    <TextBlock Text="{Binding}" Style="{StaticResource Value}" Margin="0" />
+                                </DockPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Width="340">
+                <StackPanel>
+                    <TextBlock Text="Diagnóstico" Style="{StaticResource H2}" />
+                    <TextBlock Text="Pasta de logs" Style="{StaticResource Label}" />
+                    <TextBlock Text="{Binding LogDirectory}" Style="{StaticResource Mono}" FontSize="11" />
+                    <Button Content="Abrir pasta de logs" Command="{Binding OpenLogsCommand}" Style="{StaticResource ActionButton}" HorizontalAlignment="Left" />
+
+                    <TextBlock Text="Componentes de código aberto" Style="{StaticResource H2}" Margin="0,16,0,8" />
+                    <ItemsControl ItemsSource="{Binding Licenses}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" Style="{StaticResource Label}" Margin="0,0,0,4" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </WrapPanel>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,129 @@
+<UserControl x:Class="NovaControlCenter.App.Views.ProfilesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:conv="clr-namespace:NovaControlCenter.App.Converters"
+             x:Name="Root">
+    <UserControl.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolVis" />
+
+        <!-- Cartão de perfil selecionável -->
+        <Style x:Key="ProfileCard" TargetType="ListBoxItem">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Card" Width="300" Margin="0,0,14,14" Padding="18,16" CornerRadius="14"
+                                Background="{StaticResource Surface}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                            <StackPanel>
+                                <DockPanel Margin="0,0,0,8">
+                                    <Border DockPanel.Dock="Right" CornerRadius="10" Padding="8,2" Background="{StaticResource AccentGradient}"
+                                            Visibility="{Binding IsActive, Converter={StaticResource BoolVis}}">
+                                        <TextBlock Text="ATIVO" FontSize="10" FontWeight="Bold" Foreground="White" />
+                                    </Border>
+                                    <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource Text}" TextTrimming="CharacterEllipsis" />
+                                </DockPanel>
+                                <TextBlock Text="{Binding Summary}" Style="{StaticResource Label}" FontSize="11.5" Margin="0,0,0,14" />
+                                <WrapPanel>
+                                    <Button Content="Ativar" Style="{StaticResource PrimaryButton}" Padding="12,6"
+                                            Command="{Binding DataContext.ActivateCommand, ElementName=Root}" CommandParameter="{Binding}" />
+                                    <Button Content="Duplicar" Style="{StaticResource ActionButton}" Padding="12,6"
+                                            Command="{Binding DataContext.DuplicateCommand, ElementName=Root}" CommandParameter="{Binding}" />
+                                    <Button Content="Excluir" Style="{StaticResource ActionButton}" Padding="12,6"
+                                            Command="{Binding DataContext.DeleteCommand, ElementName=Root}" CommandParameter="{Binding}"
+                                            Visibility="{Binding IsDefault, Converter={StaticResource BoolVis}, ConverterParameter=Invert}" />
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Card" Property="BorderBrush" Value="{StaticResource Surface3}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Card" Property="BorderBrush" Value="{StaticResource Accent}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="Field" TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource Surface2}" />
+            <Setter Property="Foreground" Value="{StaticResource Text}" />
+            <Setter Property="CaretBrush" Value="{StaticResource Text}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="MaxLength" Value="40" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="Box" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="10">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Accent}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel Style="{StaticResource PageRoot}">
+        <TextBlock Text="Perfis" Style="{StaticResource H1}" />
+        <TextBlock Text="Cada perfil guarda um conjunto de ajustes de software. O perfil ativo é o que vale agora; edite os ajustes em Configurações." Style="{StaticResource Subtitle}" />
+
+        <!-- Mensagem de resultado -->
+        <TextBlock Text="{Binding Message}" FontSize="13" Margin="0,0,0,12">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{StaticResource Success}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding MessageIsError}" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource Danger}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" ItemContainerStyle="{StaticResource ProfileCard}"
+                 Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+
+        <WrapPanel Margin="0,8,0,0">
+            <!-- Novo perfil -->
+            <Border Style="{StaticResource Card}" Width="380">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE710;" Style="{StaticResource IconGlyph}" /></Border>
+                        <TextBlock Text="Novo perfil" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBox Text="{Binding NewName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource Field}" Margin="0,0,0,10" />
+                    <TextBlock Text="Começa com os ajustes do perfil ativo." Style="{StaticResource Label}" Margin="0,0,0,10" />
+                    <Button Content="Criar perfil" Command="{Binding CreateCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+
+            <!-- Renomear selecionado -->
+            <Border Style="{StaticResource Card}" Width="380" IsEnabled="{Binding HasSelection}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE70F;" Style="{StaticResource IconGlyph}" /></Border>
+                        <TextBlock Text="Renomear perfil selecionado" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBox Text="{Binding EditName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource Field}" Margin="0,0,0,10" />
+                    <TextBlock Text="Clique num cartão acima para selecioná-lo." Style="{StaticResource Label}" Margin="0,0,0,10" />
+                    <Button Content="Salvar nome" Command="{Binding RenameCommand}" Style="{StaticResource ActionButton}" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+        </WrapPanel>
+    </StackPanel>
+</UserControl>

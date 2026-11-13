@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="NovaControlCenter.App.Views.ControllerVisual"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:NovaControlCenter.App.Controls">
+    <!-- Desenho do controle em um espaço fixo de 640x360, escalado pelo Viewbox (responsivo). -->
+    <UserControl.Resources>
+        <Style TargetType="c:ButtonIndicator" BasedOn="{StaticResource {x:Type c:ButtonIndicator}}">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="MinWidth" Value="0" />
+        </Style>
+        <Style x:Key="Face" TargetType="c:ButtonIndicator" BasedOn="{StaticResource {x:Type c:ButtonIndicator}}">
+            <Setter Property="Width" Value="34" />
+            <Setter Property="Height" Value="34" />
+            <Setter Property="CornerRadius" Value="17" />
+        </Style>
+        <Style x:Key="Pad" TargetType="c:ButtonIndicator" BasedOn="{StaticResource {x:Type c:ButtonIndicator}}">
+            <Setter Property="Width" Value="28" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="CornerRadius" Value="5" />
+        </Style>
+        <Style x:Key="Caption" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+        </Style>
+    </UserControl.Resources>
+
+    <Viewbox Stretch="Uniform" MaxHeight="440">
+        <Canvas Width="640" Height="360">
+            <!-- Gatilhos -->
+            <TextBlock x:Name="TxtL2" Canvas.Left="110" Canvas.Top="0" Text="L2" Style="{StaticResource Caption}" />
+            <ProgressBar Canvas.Left="110" Canvas.Top="16" Width="120" Height="6" Value="{Binding LeftTrigger, Mode=OneWay}" Style="{StaticResource TriggerBar}" />
+            <TextBlock Canvas.Left="518" Canvas.Top="0" Text="R2" Style="{StaticResource Caption}" />
+            <ProgressBar Canvas.Left="410" Canvas.Top="16" Width="120" Height="6" Value="{Binding RightTrigger, Mode=OneWay}" Style="{StaticResource TriggerBar}" FlowDirection="RightToLeft" />
+
+            <!-- Bumpers -->
+            <c:ButtonIndicator x:Name="BtnLB" Canvas.Left="110" Canvas.Top="32" Width="120" Height="22" CornerRadius="11" Label="LB" IsActive="{Binding Buttons[LeftShoulder]}" />
+            <c:ButtonIndicator x:Name="BtnRB" Canvas.Left="410" Canvas.Top="32" Width="120" Height="22" CornerRadius="11" Label="RB" IsActive="{Binding Buttons[RightShoulder]}" />
+
+            <!-- Corpo -->
+            <Path Data="{StaticResource GamepadGeometry}" Fill="{StaticResource ControllerBodyBrush}" Stroke="{StaticResource Surface3}" StrokeThickness="1.5">
+                <Path.Effect>
+                    <DropShadowEffect Color="{StaticResource AccentColor}" BlurRadius="60" ShadowDepth="0" Opacity="0.22" />
+                </Path.Effect>
+            </Path>
+
+            <!-- Centro -->
+            <c:ButtonIndicator Canvas.Left="302" Canvas.Top="84" Width="36" Height="36" CornerRadius="18" Label="⌂" IsActive="{Binding Buttons[Guide]}" ToolTip="Home" />
+            <c:ButtonIndicator x:Name="BtnSelect" Canvas.Left="264" Canvas.Top="132" Width="44" Height="20" CornerRadius="10" Label="SEL" IsActive="{Binding Buttons[Back]}" ToolTip="Select / Back" />
+            <c:ButtonIndicator x:Name="BtnStart" Canvas.Left="332" Canvas.Top="132" Width="44" Height="20" CornerRadius="10" Label="STA" IsActive="{Binding Buttons[Start]}" ToolTip="Start" />
+
+            <!-- Analógico esquerdo (alto) e D-pad (baixo) -->
+            <c:StickView Canvas.Left="133" Canvas.Top="98" Width="84" Height="84" X="{Binding LeftX}" Y="{Binding LeftY}" IsPressed="{Binding Buttons[LeftThumb]}" />
+            <Border Canvas.Left="231" Canvas.Top="198" Width="28" Height="28" Background="{StaticResource Surface2}" />
+            <c:ButtonIndicator Canvas.Left="231" Canvas.Top="170" Style="{StaticResource Pad}" Label="▲" IsActive="{Binding Buttons[DPadUp]}" />
+            <c:ButtonIndicator Canvas.Left="231" Canvas.Top="226" Style="{StaticResource Pad}" Label="▼" IsActive="{Binding Buttons[DPadDown]}" />
+            <c:ButtonIndicator Canvas.Left="203" Canvas.Top="198" Style="{StaticResource Pad}" Label="◀" IsActive="{Binding Buttons[DPadLeft]}" />
+            <c:ButtonIndicator Canvas.Left="259" Canvas.Top="198" Style="{StaticResource Pad}" Label="▶" IsActive="{Binding Buttons[DPadRight]}" />
+
+            <!-- Botões de ação (alto) e analógico direito (baixo) -->
+            <c:ButtonIndicator x:Name="FaceY" Canvas.Left="448" Canvas.Top="89" Style="{StaticResource Face}" Label="Y" IsActive="{Binding Buttons[Y]}" />
+            <c:ButtonIndicator x:Name="FaceX" Canvas.Left="414" Canvas.Top="123" Style="{StaticResource Face}" Label="X" IsActive="{Binding Buttons[X]}" />
+            <c:ButtonIndicator x:Name="FaceB" Canvas.Left="482" Canvas.Top="123" Style="{StaticResource Face}" Label="B" IsActive="{Binding Buttons[B]}" />
+            <c:ButtonIndicator x:Name="FaceA" Canvas.Left="448" Canvas.Top="157" Style="{StaticResource Face}" Label="A" IsActive="{Binding Buttons[A]}" />
+            <c:StickView Canvas.Left="353" Canvas.Top="170" Width="84" Height="84" X="{Binding RightX}" Y="{Binding RightY}" IsPressed="{Binding Buttons[RightThumb]}" />
+
+            <!-- Legenda -->
+            <TextBlock Canvas.Left="0" Canvas.Top="342" Width="640" TextAlignment="Center" Style="{StaticResource Caption}"
+                       Text="Analógicos ficam verdes ao clicar (L3 / R3)" />
+        </Canvas>
+    </Viewbox>
+</UserControl>

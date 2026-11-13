@@ -1,4 +1,4 @@
-namespace NovaControlCenter.Core.Models;
+﻿namespace NovaControlCenter.Core.Models;
 
 /// <summary>Preferências do PS4 que sobrevivem entre sessões. Tipos primitivos para manter o Core sem dependências.</summary>
 public sealed record Ds4Settings
@@ -23,4 +23,9 @@ public sealed record AppSettings
     public int Version { get; init; } = CurrentVersion;
 
     public Ds4Settings Ds4 { get; init; } = new();
+
+    /// <summary>Perfis do usuário; null/vazio = criar os perfis iniciais.</summary>
+    public IReadOnlyList<InputProfile>? Profiles { get; init; }
+
+    public Guid? ActiveProfileId { get; init; }
 }

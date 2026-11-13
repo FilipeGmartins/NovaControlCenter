@@ -68,11 +68,13 @@ Status: ⬜ a fazer · 🔄 em andamento · ✅ feito · ⛔ bloqueado (aguarda 
 ## Sprint 05 — Configurações e perfis
 | ID | Item | Prio | Status |
 |---|---|---|---|
-| S5-01 | `InputProcessor`: deadzone radial/axial, curva de resposta, faixa de gatilho + testes | P1 | ⬜ |
-| S5-02 | Tela de Configurações com rótulo 🖥️ Software / 🎮 Firmware e pré-visualização ao vivo | P1 | ⬜ |
-| S5-03 | `JsonProfileRepository` (%AppData%), escrita atômica, versão de schema | P1 | ⬜ |
-| S5-04 | Tela de Perfis: criar, renomear, excluir, duplicar, ativar; perfis padrão | P1 | ⬜ |
+| S5-01 | `InputProcessor`: deadzone radial/axial, curva de resposta, faixa de gatilho + testes | P1 | ✅ |
+| S5-02 | Tela de Configurações com rótulo 🖥️ Software / 🎮 Firmware e pré-visualização ao vivo | P1 | ✅ |
+| S5-03 | `JsonProfileRepository` (%AppData%), escrita atômica, versão de schema | P1 | ✅ (no settings.json, ADR-25) |
+| S5-04 | Tela de Perfis: criar, renomear, excluir, duplicar, ativar; perfis padrão | P1 | ✅ |
 | S5-05 | Remapeamento de botões (software) | P2 | ⬜ |
+| S5-06 | Aplicar perfis ao GameSir nos jogos (pad virtual + ocultar o original com HidHide) | P3 | ⬜ |
+| S5-07 | Validar com o usuário a sensação dos perfis num jogo (PS4 no modo Xbox) | P1 | ⬜ |
 
 ## Sprint 06 — Qualidade / v1.0
 | ID | Item | Prio | Status |

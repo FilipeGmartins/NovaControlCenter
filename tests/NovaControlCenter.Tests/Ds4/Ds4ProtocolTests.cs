@@ -295,3 +295,15 @@ public class Ds4SensorTests
     public void BluetoothBasic_HasNoSensors() =>
         Assert.Null(Ds4Protocol.ParseInput(Convert.FromHexString("01808080800800000000"), bluetooth: true, 1)!.Motion);
 }
+
+public class Ds4ServiceLifetimeTests
+{
+    [Fact]
+    public void Dispose_TwiceDoesNotThrow()
+    {
+        var service = new Ds4Service(Microsoft.Extensions.Logging.Abstractions.NullLogger<Ds4Service>.Instance);
+        service.Dispose();
+        var second = Record.Exception(service.Dispose);
+        Assert.Null(second);
+    }
+}

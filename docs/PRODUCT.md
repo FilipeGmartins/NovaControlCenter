@@ -22,9 +22,9 @@ Jogadores de PC com o T4 Nova Lite que querem ver o estado do controle (conexão
 | Bateria | Mensagem clara "não informada pelo receptor"; tempo de uso desde a conexão (medido pelo app) | ❌ leitura real impossível pelos meios seguros (ver HARDWARE_DIAGNOSTICS §4); alertas adiados |
 | Monitoramento | Botões, analógicos (visual 2D), gatilhos, valores brutos, taxa de atualização | ✅ via XInput |
 | Vibração | Teste dos motores esquerdo/direito | ✅ via XInput |
-| Configurações de software | Deadzone, curva de sensibilidade, faixa de gatilho, remapeamento | 🟡 só afetam jogos se houver pad virtual (ViGEm + HidHide) — ver ARCHITECTURE |
+| Configurações de software | Zona morta, curva de sensibilidade, zona morta e curso dos gatilhos, intensidade da vibração | ✅ **valem nos jogos para o PS4 no modo Xbox** (o app gera o controle virtual); GameSir: só pré-visualização (o jogo lê o controle direto); remapeamento ainda não implementado |
 | Configurações de firmware | — | ❌ fora do v1.0 salvo descoberta de protocolo |
-| Perfis | CRUD, salvar/carregar, perfis padrão (Padrão, FPS, Corrida) | ✅ |
+| Perfis | Criar, duplicar, renomear, excluir (com confirmação; o Padrão é protegido), ativar; perfis iniciais Padrão, FPS e Corrida | ✅ |
 
 ## Expansão de escopo — DualShock 4 (decidido em 2026-11-13)
 Pedido do usuário: suportar também o controle de PS4 (DS4 via Bluetooth), apenas o básico.
