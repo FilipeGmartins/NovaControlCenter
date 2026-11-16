@@ -14,6 +14,7 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). 
 - Monitoramento (tamanho mínimo): o aviso de "nenhuma leitura" era cortado.
 
 ### Distribuição
+- **Ícone do app** (quadrado arredondado com o gradiente da marca e a silhueta do controle) no executável, na janela e na barra de tarefas. Gerado por `tools/icon/make-icon.ps1`: 10 tamanhos, de 16 a 256 px; o de 256 em PNG e os demais como bitmap clássico, para máxima compatibilidade.
 - Executável único `NovaControlCenter.exe` (75,6 MB, self-contained, sem precisar do .NET), validado: abre, mostra a versão, aplica preferências e fecha sem erro.
 - `README.md` e `docs/TEST_CHECKLIST.md` (testes manuais pendentes).
 - Versão `1.0.0-rc.1`.

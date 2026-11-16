@@ -6,6 +6,7 @@
         xmlns:conv="clr-namespace:NovaControlCenter.App.Converters"
         xmlns:p="clr-namespace:NovaControlCenter.App.Presentation"
         Title="Nova Control Center"
+        Icon="/Resources/NovaControlCenter.ico"
         Width="1240" Height="800" MinWidth="960" MinHeight="620"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None" ResizeMode="CanResize"

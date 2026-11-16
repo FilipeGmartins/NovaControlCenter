@@ -6,6 +6,8 @@
     <!-- LibraryImport (barra de título escura via dwmapi) -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>NovaControlCenter</AssemblyName>
+    <!-- Ícone do executável (Explorer, atalhos). Gerado por tools/icon/make-icon.ps1. -->
+    <ApplicationIcon>Resources\NovaControlCenter.ico</ApplicationIcon>
     <!-- CA1822: propriedades de ViewModel precisam ser de instância para o binding do XAML -->
     <NoWarn>$(NoWarn);CA1822</NoWarn>
   </PropertyGroup>
@@ -18,5 +20,9 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Ícone da janela (barra de tarefas, Alt+Tab). -->
+    <Resource Include="Resources\NovaControlCenter.ico" />
   </ItemGroup>
 </Project>

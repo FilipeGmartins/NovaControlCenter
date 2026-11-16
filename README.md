@@ -1,3 +1,5 @@
+﻿<img src="tools/icon/NovaControlCenter-256.png" width="96" align="right" alt="Ícone do Nova Control Center" />
+
 # Nova Control Center
 
 Aplicativo para Windows que monitora e personaliza o **GameSir T4 Nova Lite** (receptor USB 2.4 GHz) e o **DualShock 4** (PS4), sem depender de software oficial.
@@ -10,7 +12,7 @@ Aplicativo para Windows que monitora e personaliza o **GameSir T4 Nova Lite** (r
 - Opcional: [ViGEmBus](https://github.com/nefarius/ViGEmBus) para o modo Xbox do PS4.
 
 ## Como usar
-1. Copie `NovaControlCenter.exe` para qualquer pasta e abra.
+1. Baixe o `NovaControlCenter.exe` em [Releases](https://github.com/FilipeGmartins/NovaControlCenter/releases), coloque em qualquer pasta e abra.
 2. Conecte o receptor do GameSir e/ou o controle de PS4 (cabo USB ou Bluetooth).
 3. Use o menu lateral: **Dashboard**, **Monitoramento**, **Controle PS4**, **Configurações**, **Perfis** e **Sobre**.
 
