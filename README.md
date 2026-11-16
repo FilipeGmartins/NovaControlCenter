@@ -4,7 +4,7 @@
 
 Aplicativo para Windows que monitora e personaliza o **GameSir T4 Nova Lite** (receptor USB 2.4 GHz) e o **DualShock 4** (PS4), sem depender de software oficial.
 
-> Versão **1.0.0**. Testes manuais com os controles seguem em [docs/TEST_CHECKLIST.md](docs/TEST_CHECKLIST.md).
+> Versão **1.1.0**. Testes manuais com os controles seguem em [docs/TEST_CHECKLIST.md](docs/TEST_CHECKLIST.md).
 
 ## Requisitos
 - Windows 10 (1809 ou mais recente) ou Windows 11, 64 bits.
@@ -29,6 +29,8 @@ Aplicativo para Windows que monitora e personaliza o **GameSir T4 Nova Lite** (r
 | Modo Xbox (XInput emulado) | — | ✅ com ViGEmBus; só funciona com o app aberto |
 | Perfis (zona morta, curva, gatilhos, vibração) | pré-visualização | ✅ valem nos jogos no modo Xbox |
 
+**Segundo plano:** fechar ou minimizar esconde o app na bandeja (ao lado do relógio), usando cerca de 15–20 MB e quase nenhuma CPU; o PS4 no modo Xbox continua funcionando. Opções "Iniciar com o Windows" e "Abrir já minimizado" em Configurações. Para sair: botão direito no ícone → Sair.
+
 Todas as escolhas (perfis, modo do PS4, cor da luz) ficam em `%AppData%\NovaControlCenter\settings.json`.
 
 ## Segurança e privacidade
@@ -41,7 +43,7 @@ Todas as escolhas (perfis, modo do PS4, cor da luz) ficam em `%AppData%\NovaCont
 ```
 dotnet build
 dotnet test
-dotnet publish src/NovaControlCenter.App -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:DebugType=none -o publish
+dotnet publish src/NovaControlCenter.App -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=none -o publish
 ```
 - .NET 8, WPF + MVVM (CommunityToolkit.Mvvm), Generic Host, Serilog, HidSharp, Nefarius.ViGEm.Client, NAudio.
 - `tools/NovaControlCenter.Probe` (`nova-probe`): ferramenta de diagnóstico de hardware.

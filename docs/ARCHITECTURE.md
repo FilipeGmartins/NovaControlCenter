@@ -64,7 +64,9 @@ Clean Architecture em 3 camadas + testes. A dependência aponta sempre para dent
 | ADR-32 | Página PS4 em abas, com detalhes técnicos recolhidos (estilos `SegmentTabs`, `Details`, `Hint`) | Pedido do usuário: interface menos poluída, sem perder informação |
 | ADR-33 | `AccentStrong` (#3867E0→#7244DE) para fundos com texto branco; `AccentGradient` só decorativo | Contraste WCAG AA (≥ 4,5:1) |
 | ADR-34 | `FocusRing` como `FocusVisualStyle` em todos os controles interativos | Foco visível para quem navega pelo teclado; não aparece com o mouse |
-| ADR-35 | Distribuição: `PublishSingleFile` + `SelfContained` (win-x64) com compressão | Um só arquivo, sem instalar o .NET |
+| ADR-35 | Distribuição: `PublishSingleFile` + `SelfContained` (win-x64) **sem compressão** (revisto: a compressão dobrava a memória privada) | Um só arquivo, sem instalar o .NET, com menor uso de memória |
+| ADR-36 | Bandeja via `System.Windows.Forms.NotifyIcon` (`UseWindowsForms` só para isso, sem usings globais) | O WPF não tem ícone de bandeja; evita dependência externa |
+| ADR-37 | `UiActivity` pausa os timers de tela quando a janela some; serviços de hardware seguem ativos | O trabalho de tela é a maior fonte de CPU; o modo Xbox precisa continuar em segundo plano |
 
 ## 3. Identificação do controle
 

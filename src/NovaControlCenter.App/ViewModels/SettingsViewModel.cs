@@ -50,9 +50,11 @@ public sealed partial class SettingsViewModel : ObservableObject
     [ObservableProperty] private double _rawRT;
     [ObservableProperty] private double _outRT;
 
-    public SettingsViewModel(ProfileService profiles, InputMonitor? gamesir = null, IDs4Controller? ds4 = null, bool startTimers = true)
+    public SettingsViewModel(ProfileService profiles, InputMonitor? gamesir = null, IDs4Controller? ds4 = null, bool startTimers = true,
+        Services.UiActivity? activity = null, BackgroundOptionsViewModel? background = null)
     {
         _profiles = profiles ?? throw new ArgumentNullException(nameof(profiles));
+        Background = background;
         _gamesir = gamesir;
         _ds4 = ds4;
         _commit = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
@@ -64,11 +66,15 @@ public sealed partial class SettingsViewModel : ObservableObject
         var frame = new DispatcherTimer(DispatcherPriority.Render) { Interval = TimeSpan.FromMilliseconds(16) };
         frame.Tick += (_, _) => RefreshPreview();
         frame.Start();
+        activity?.Track(frame);
     }
 
     public string LeftCurveText => DescribeCurve(LeftCurve);
 
     public string RightCurveText => DescribeCurve(RightCurve);
+
+    /// <summary>Opções de segundo plano (bandeja, iniciar com o Windows). Null nos testes.</summary>
+    public BackgroundOptionsViewModel? Background { get; }
 
     /// <summary>Perfil montado a partir dos sliders (usado na prévia e ao gravar).</summary>
     public InputProfile Draft => _profiles.Active with

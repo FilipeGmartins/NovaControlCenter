@@ -89,7 +89,7 @@ Status: ⬜ a fazer · 🔄 em andamento · ✅ feito · ⛔ bloqueado (aguarda 
 |---|---|---|
 | F-01 | Pad virtual (ViGEm + HidHide) para aplicar ajustes de software nos jogos | P3 |
 | F-02 | Configurações de firmware (somente se protocolo documentado) | P3 |
-| F-03 | Iniciar com o Windows / minimizar na bandeja | P2 |
+| F-03 | Iniciar com o Windows / minimizar na bandeja | P2 · ✅ (bandeja, iniciar com o Windows, iniciar minimizado) |
 | F-04 | Troca automática de perfil por jogo (processo em foco) | P3 |
 
 | F-05 | Capturar o protocolo do software oficial (USBPcap) para tentar ler a bateria pela interface vendor `0xFF7A` | P2 |

@@ -122,7 +122,7 @@ public sealed partial class Ds4ViewModel : ObservableObject
     [ObservableProperty] private string _gameViewButtons = Presenter.Dash;
     [ObservableProperty] private string _gameViewSticks = Presenter.Dash;
 
-    public Ds4ViewModel(IDs4Controller ds4, IInputReader? xinput = null, IControllerAudio? audio = null, ISettingsStore? settings = null)
+    public Ds4ViewModel(IDs4Controller ds4, IInputReader? xinput = null, IControllerAudio? audio = null, ISettingsStore? settings = null, UiActivity? activity = null)
     {
         _xinput = xinput;
         _settings = settings;
@@ -144,6 +144,7 @@ public sealed partial class Ds4ViewModel : ObservableObject
         var frame = new DispatcherTimer(DispatcherPriority.Render) { Interval = TimeSpan.FromMilliseconds(16) };
         frame.Tick += (_, _) => Refresh();
         frame.Start();
+        activity?.Track(frame);
         Refresh();
     }
 
@@ -174,6 +175,9 @@ public sealed partial class Ds4ViewModel : ObservableObject
         _ds4.Mode = value.Value;
         SavePreferences();
     }
+
+    /// <summary>Troca o modo de reconhecimento (usado também pelo menu da bandeja).</summary>
+    public void SelectMode(Ds4RecognitionMode mode) => SelectedMode = Modes.First(m => m.Value == mode);
 
     partial void OnSelectedVariantChanged(Ds4VariantOption value) => SavePreferences();
 

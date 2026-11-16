@@ -1,4 +1,4 @@
-using System.Windows.Threading;
+﻿using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using NovaControlCenter.App.Presentation;
 using NovaControlCenter.App.Services;
@@ -26,7 +26,7 @@ public sealed partial class DashboardViewModel : ObservableObject
     [ObservableProperty] private string _batteryDetail = string.Empty;
     [ObservableProperty] private string _connectedFor = Presenter.Dash;
 
-    public DashboardViewModel(ConnectionMonitor connection, BatteryService battery, IUiDispatcher ui, TimeProvider time)
+    public DashboardViewModel(ConnectionMonitor connection, BatteryService battery, IUiDispatcher ui, TimeProvider time, Services.UiActivity? activity = null)
     {
         ArgumentNullException.ThrowIfNull(connection);
         ArgumentNullException.ThrowIfNull(ui);
@@ -39,6 +39,7 @@ public sealed partial class DashboardViewModel : ObservableObject
         var clock = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         clock.Tick += (_, _) => UpdateDuration();
         clock.Start();
+        activity?.Track(clock);
     }
 
     private void Apply(ConnectionSnapshot snapshot)

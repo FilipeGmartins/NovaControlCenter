@@ -15,6 +15,16 @@ public sealed record Ds4Settings
     public string OutputVariant { get; init; } = "LinuxControl";
 }
 
+/// <summary>Comportamento da janela e do app em segundo plano.</summary>
+public sealed record AppBehavior
+{
+    /// <summary>Fechar ou minimizar esconde o app na bandeja em vez de encerrar.</summary>
+    public bool KeepInTray { get; init; } = true;
+
+    /// <summary>Abrir já escondido na bandeja.</summary>
+    public bool StartMinimized { get; init; }
+}
+
 /// <summary>Raiz do arquivo de configurações. <see cref="Version"/> permite migrar o formato no futuro.</summary>
 public sealed record AppSettings
 {
@@ -23,6 +33,8 @@ public sealed record AppSettings
     public int Version { get; init; } = CurrentVersion;
 
     public Ds4Settings Ds4 { get; init; } = new();
+
+    public AppBehavior App { get; init; } = new();
 
     /// <summary>Perfis do usuário; null/vazio = criar os perfis iniciais.</summary>
     public IReadOnlyList<InputProfile>? Profiles { get; init; }

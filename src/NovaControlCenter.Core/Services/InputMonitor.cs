@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using NovaControlCenter.Core.Interfaces;
 using NovaControlCenter.Core.Models;
 
@@ -59,6 +59,9 @@ public sealed partial class InputMonitor : IAsyncDisposable
             }
         }
     }
+
+    /// <summary>Quando true, o loop não lê o controle (usado com a janela escondida na bandeja).</summary>
+    public bool Suspended { get; set; }
 
     public void Start()
     {
@@ -123,7 +126,9 @@ public sealed partial class InputMonitor : IAsyncDisposable
     {
         using var timer = new PeriodicTimer(_interval, _time);
         while (await timer.WaitForNextTickAsync(ct).ConfigureAwait(false))
-            Poll();
+        {
+            if (!Suspended) Poll();
+        }
     }
 
     private void TrimRateWindow(DateTimeOffset now)

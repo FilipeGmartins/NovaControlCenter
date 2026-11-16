@@ -27,7 +27,7 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty] private string _ds4StatusTitle = string.Empty;
 
     public MainViewModel(DashboardViewModel dashboard, MonitorViewModel monitor, Ds4ViewModel ds4, SettingsViewModel settings, ProfilesViewModel profiles, AboutViewModel about,
-        ConnectionMonitor connection, IUiDispatcher ui, IDs4Controller ds4Controller)
+        ConnectionMonitor connection, IUiDispatcher ui, IDs4Controller ds4Controller, UiActivity? activity = null)
     {
         ArgumentNullException.ThrowIfNull(ds4Controller);
         ArgumentNullException.ThrowIfNull(connection);
@@ -51,6 +51,7 @@ public sealed partial class MainViewModel : ObservableObject
         var ds4Timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
         ds4Timer.Tick += (_, _) => ApplyDs4(Ds4Presenter.Link(ds4Controller.Current));
         ds4Timer.Start();
+        activity?.Track(ds4Timer);
         ApplyDs4(Ds4Presenter.Link(ds4Controller.Current));
     }
 

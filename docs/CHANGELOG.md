@@ -2,6 +2,26 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versionamento SemVer.
 
+## [1.1.0] — 2026-11-16 — Segundo plano
+
+### Adicionado
+- **Ícone na bandeja** (ao lado do relógio) com menu escuro: Abrir, modo do PS4 (PlayStation/Xbox) e Sair; a dica mostra o estado dos dois controles.
+- **Fechar ou minimizar esconde o app na bandeja** (opção "Manter na bandeja", ligada por padrão).
+- **Iniciar com o Windows** (entrada do usuário em `HKCU\...\Run`, sem precisar de administrador) e **Abrir já minimizado** (argumento `--minimized`).
+- Na bandeja: os timers das telas param (`UiActivity`), a leitura do GameSir é suspensa (`InputMonitor.Suspended`) e a memória não usada é devolvida ao Windows (`EmptyWorkingSet`). O serviço do PS4 continua ativo (modo Xbox).
+- 8 novos testes (182 no total).
+
+### Alterado
+- Executável publicado **sem compactação**: a compactação do arquivo único dobrava a memória privada (115 → 59 MB). O `.exe` fica maior (182 MB em vez de 76 MB).
+
+### Medido (executável publicado)
+| Cenário | Memória em uso | Privada | CPU |
+|---|---|---|---|
+| Antes: minimizado (compactado) | 220 MB | 118 MB | 0,4% |
+| Aberto (não compactado) | 140 MB | 61 MB | 0,17% |
+| Fechado → bandeja | 15 MB | 54 MB | 0,12% |
+| Iniciado com `--minimized` | 18 MB | 30 MB | 0,04% |
+
 ## [1.0.0] — 2026-11-16
 
 Primeira versão estável, promovida a partir da 1.0.0-rc.1 sem mudanças de código.

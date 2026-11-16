@@ -3,6 +3,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>$(NovaWindowsTfm)</TargetFramework>
     <UseWPF>true</UseWPF>
+    <!-- Só para o NotifyIcon (ícone da bandeja); o WPF não tem um. -->
+    <UseWindowsForms>true</UseWindowsForms>
     <!-- LibraryImport (barra de título escura via dwmapi) -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>NovaControlCenter</AssemblyName>
@@ -20,6 +22,14 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="NovaControlCenter.Tests" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Evita conflitos de nomes WPF x Windows Forms (Application, Button, MessageBox...). -->
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <!-- Ícone da janela (barra de tarefas, Alt+Tab). -->

@@ -30,6 +30,21 @@
             </StackPanel>
         </Border>
         <WrapPanel>
+            <!-- Segundo plano -->
+            <Border Style="{StaticResource Card}" Width="420" DataContext="{Binding Background}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <Border Style="{StaticResource IconBadge}"><TextBlock Text="&#xE7E8;" Style="{StaticResource IconGlyph}" /></Border>
+                        <TextBlock Text="Segundo plano" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <CheckBox Content="Manter na bandeja ao fechar ou minimizar" IsChecked="{Binding KeepInTray}" Style="{StaticResource ToggleSwitch}" Margin="0,0,0,12" />
+                    <CheckBox Content="Iniciar com o Windows" IsChecked="{Binding StartWithWindows}" Style="{StaticResource ToggleSwitch}" Margin="0,0,0,12" />
+                    <CheckBox Content="Abrir já minimizado na bandeja" IsChecked="{Binding StartMinimized}" Style="{StaticResource ToggleSwitch}" Margin="0,0,0,8" />
+                    <TextBlock Text="{Binding Message}" Style="{StaticResource Hint}" />
+                    <TextBlock Style="{StaticResource Hint}"
+                               Text="Na bandeja, as telas param de desenhar e a memória é devolvida ao Windows. O PS4 no modo Xbox continua funcionando. Para sair de vez: clique com o botão direito no ícone ao lado do relógio → Sair." />
+                </StackPanel>
+            </Border>
             <!-- Analógicos -->
             <Border Style="{StaticResource Card}" Width="420">
                 <StackPanel>

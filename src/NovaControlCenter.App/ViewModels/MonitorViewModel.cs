@@ -40,7 +40,7 @@ public sealed partial class MonitorViewModel : ObservableObject, IDisposable
     [ObservableProperty] private bool _continuousVibration;
     [ObservableProperty] private string _vibrationStatus = "Parada";
 
-    public MonitorViewModel(InputMonitor input, ConnectionMonitor connection, IRumbleService rumble)
+    public MonitorViewModel(InputMonitor input, ConnectionMonitor connection, IRumbleService rumble, Services.UiActivity? activity = null)
     {
         _input = input ?? throw new ArgumentNullException(nameof(input));
         _connection = connection ?? throw new ArgumentNullException(nameof(connection));
@@ -51,6 +51,7 @@ public sealed partial class MonitorViewModel : ObservableObject, IDisposable
         var frame = new DispatcherTimer(DispatcherPriority.Render) { Interval = TimeSpan.FromMilliseconds(16) };
         frame.Tick += (_, _) => Refresh();
         frame.Start();
+        activity?.Track(frame);
     }
 
     /// <summary>Botões pressionados agora.</summary>

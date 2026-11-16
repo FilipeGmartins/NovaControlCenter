@@ -4,6 +4,7 @@ using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NovaControlCenter.App.Presentation;
 using NovaControlCenter.App.Services;
 using NovaControlCenter.App.ViewModels;
 using NovaControlCenter.App.Views;
@@ -19,12 +20,21 @@ using Serilog;
 namespace NovaControlCenter.App;
 
 /// <summary>Composition root: monta o host, inicia os monitores e abre a janela principal.</summary>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001", Justification = "O ícone da bandeja é descartado em OnExit, fim do ciclo de vida do Application.")]
 public partial class App : Application
 {
     public static readonly string LogDirectory =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "NovaControlCenter", "logs");
 
+    /// <summary>Argumento usado por "Iniciar com o Windows": abre direto na bandeja.</summary>
+    public const string MinimizedArgument = "--minimized";
+
+    private static readonly TimeSpan TrimDelay = TimeSpan.FromSeconds(2);
+
     private IHost? _host;
+    private TrayIcon? _tray;
+    private UiActivity? _activity;
+    private bool _exiting;
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -52,13 +62,84 @@ public partial class App : Application
         services.GetRequiredService<Ds4Service>().ProfileProvider = () => profiles.Active;
         services.GetRequiredService<Ds4Service>().Start();
 
+        // Em segundo plano, a leitura do GameSir (só usada pelas telas) fica pausada.
+        _activity = services.GetRequiredService<UiActivity>();
+        var gamesirInput = services.GetRequiredService<InputMonitor>();
+        _activity.VisibilityChanged += (_, visible) => gamesirInput.Suspended = !visible;
+
         Log.Information("Nova Control Center iniciado");
-        MainWindow = services.GetRequiredService<MainWindow>();
-        MainWindow.Show();
+        var window = services.GetRequiredService<MainWindow>();
+        MainWindow = window;
+        window.Closing += OnWindowClosing;
+        window.StateChanged += (_, _) =>
+        {
+            if (window.WindowState == WindowState.Minimized && KeepInTray) HideToTray();
+        };
+
+        var connection = services.GetRequiredService<ConnectionMonitor>();
+        var ds4 = services.GetRequiredService<IDs4Controller>();
+        _tray = new TrayIcon(ds4,
+            statusText: () => $"GameSir: {Presenter.Connection(connection.Current).Title}\nPS4: {Ds4Presenter.Link(ds4.Current).Title}",
+            open: ShowFromTray,
+            exit: ExitApp,
+            setMode: mode => services.GetRequiredService<Ds4ViewModel>().SelectMode(mode));
+
+        var startHidden = e.Args.Contains(MinimizedArgument, StringComparer.OrdinalIgnoreCase) || settings.App.StartMinimized;
+        if (startHidden) HideToTray(notify: false);
+        else window.Show();
+    }
+
+    private bool KeepInTray => _host?.Services.GetRequiredService<ISettingsStore>().Load().App.KeepInTray ?? false;
+
+    /// <summary>Esconde a janela, pausa o trabalho de tela e devolve memória ao Windows.</summary>
+    private void HideToTray(bool notify = true)
+    {
+        MainWindow?.Hide();
+        _activity?.SetVisible(false);
+        if (notify) _tray?.NotifyMinimized();
+        Log.Information("Janela escondida na bandeja");
+
+        // Espera a janela sumir antes de liberar a memória (o trim antes disso seria desfeito pelo desenho).
+        var trim = new DispatcherTimer { Interval = TrimDelay };
+        trim.Tick += (_, _) =>
+        {
+            trim.Stop();
+            if (_activity is { IsVisible: false }) MemoryTrimmer.Trim();
+        };
+        trim.Start();
+    }
+
+    private void ShowFromTray()
+    {
+        if (MainWindow is not { } window) return;
+        _activity?.SetVisible(true);
+        window.Show();
+        if (window.WindowState == WindowState.Minimized) window.WindowState = WindowState.Normal;
+        window.Activate();
+    }
+
+    private void ExitApp()
+    {
+        _exiting = true;
+        Shutdown();
+    }
+
+    private void OnWindowClosing(object? sender, System.ComponentModel.CancelEventArgs e)
+    {
+        if (_exiting) return;
+        if (KeepInTray)
+        {
+            e.Cancel = true;
+            HideToTray();
+            return;
+        }
+        _exiting = true;
+        Dispatcher.BeginInvoke(Shutdown);
     }
 
     protected override void OnExit(ExitEventArgs e)
     {
+        _tray?.Dispose();
         if (_host is not null)
         {
             _host.Services.GetRequiredService<MonitorViewModel>().StopVibration();
@@ -82,6 +163,9 @@ public partial class App : Application
         services.AddSingleton<IControllerAudio, ControllerAudio>();
         services.AddSingleton<Ds4Service>();
         services.AddSingleton<IDs4Controller>(sp => sp.GetRequiredService<Ds4Service>());
+        services.AddSingleton<UiActivity>();
+        services.AddSingleton<IStartupRegistration, RegistryStartupRegistration>();
+        services.AddSingleton<BackgroundOptionsViewModel>();
         services.AddSingleton<ISettingsStore>(sp => new JsonSettingsStore(sp.GetRequiredService<ILogger<JsonSettingsStore>>()));
 
         // Core
@@ -109,7 +193,8 @@ public partial class App : Application
         services.AddSingleton<Ds4ViewModel>();
         services.AddSingleton<IUserPrompt, MessageBoxUserPrompt>();
         services.AddSingleton(sp => new SettingsViewModel(
-            sp.GetRequiredService<ProfileService>(), sp.GetRequiredService<InputMonitor>(), sp.GetRequiredService<IDs4Controller>()));
+            sp.GetRequiredService<ProfileService>(), sp.GetRequiredService<InputMonitor>(), sp.GetRequiredService<IDs4Controller>(),
+            activity: sp.GetRequiredService<UiActivity>(), background: sp.GetRequiredService<BackgroundOptionsViewModel>()));
         services.AddSingleton<ProfilesViewModel>();
         services.AddSingleton<AboutViewModel>();
         services.AddSingleton<MainViewModel>();
