@@ -32,6 +32,23 @@
         <GradientStop Color="{StaticResource AccentColor}" Offset="0" />
         <GradientStop Color="{StaticResource Accent2Color}" Offset="1" />
     </LinearGradientBrush>
+    <!-- Versão escura do destaque para fundos COM TEXTO branco: contraste 5,0:1 / 5,8:1 (WCAG AA). -->
+    <LinearGradientBrush x:Key="AccentStrong" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#3867E0" Offset="0" />
+        <GradientStop Color="#7244DE" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- Contorno de foco visível só na navegação por teclado (Tab). -->
+    <Style x:Key="FocusRing">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle Margin="-3" RadiusX="11" RadiusY="11" Stroke="{StaticResource Accent}" StrokeThickness="2" SnapsToDevicePixels="True" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <LinearGradientBrush x:Key="HeroGradient" StartPoint="0,0" EndPoint="1,1">
         <GradientStop Color="#1C2540" Offset="0" />
         <GradientStop Color="#161A26" Offset="0.55" />
@@ -157,7 +174,7 @@
     <Style x:Key="NavItem" TargetType="ListBoxItem">
         <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
@@ -235,6 +252,7 @@
 
     <!-- ===== Botões ===== -->
     <Style x:Key="ActionButton" TargetType="Button">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}" />
         <Setter Property="Foreground" Value="{StaticResource Text}" />
         <Setter Property="Background" Value="{StaticResource Surface2}" />
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
@@ -270,7 +288,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="Root" Background="{StaticResource AccentGradient}" CornerRadius="10" Padding="{TemplateBinding Padding}">
+                    <Border x:Name="Root" Background="{StaticResource AccentStrong}" CornerRadius="10" Padding="{TemplateBinding Padding}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -293,7 +311,7 @@
     <Style x:Key="ToggleSwitch" TargetType="CheckBox">
         <Setter Property="Foreground" Value="{StaticResource Text}" />
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
@@ -354,7 +372,7 @@
     <Style TargetType="Slider">
         <Setter Property="IsMoveToPointEnabled" Value="True" />
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Slider">
@@ -455,7 +473,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsActive" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="{StaticResource AccentGradient}" />
+                            <Setter TargetName="Root" Property="Background" Value="{StaticResource AccentStrong}" />
                             <Setter TargetName="Root" Property="BorderBrush" Value="#AAFFFFFF" />
                             <Setter TargetName="Caption" Property="Foreground" Value="White" />
                         </Trigger>
@@ -486,7 +504,8 @@
                                 CornerRadius="14" Padding="4" HorizontalAlignment="Left" Margin="0,0,0,20">
                             <TabPanel IsItemsHost="True" />
                         </Border>
-                        <ContentPresenter ContentSource="SelectedContent" />
+                        <!-- O nome PART_SelectedContentHost é exigido pelo WPF para expor o conteúdo da aba a leitores de tela. -->
+                        <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
@@ -495,7 +514,7 @@
     <Style TargetType="TabItem">
         <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
@@ -507,7 +526,7 @@
                             <Setter Property="Foreground" Value="{StaticResource Text}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Pill" Property="Background" Value="{StaticResource AccentGradient}" />
+                            <Setter TargetName="Pill" Property="Background" Value="{StaticResource AccentStrong}" />
                             <Setter Property="Foreground" Value="White" />
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -524,7 +543,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Expander">
                     <StackPanel>
-                        <ToggleButton IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Cursor="Hand" FocusVisualStyle="{x:Null}">
+                        <ToggleButton IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Cursor="Hand" FocusVisualStyle="{StaticResource FocusRing}"
+                                      AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}">
                             <ToggleButton.Template>
                                 <ControlTemplate TargetType="ToggleButton">
                                     <StackPanel Orientation="Horizontal" Background="Transparent">

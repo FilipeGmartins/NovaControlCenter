@@ -26,11 +26,11 @@
         <!-- Aviso quando não há leitura -->
         <Border Style="{StaticResource Card}" BorderBrush="{StaticResource Warning}" Padding="18,14"
                 Visibility="{Binding IsActive, Converter={StaticResource BoolVis}, ConverterParameter=Invert}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="&#xE7BA;" FontFamily="{StaticResource IconFont}" FontSize="18" Foreground="{StaticResource Warning}" VerticalAlignment="Center" />
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left" Text="&#xE7BA;" FontFamily="{StaticResource IconFont}" FontSize="18" Foreground="{StaticResource Warning}" VerticalAlignment="Center" />
                 <TextBlock Text="Nenhuma leitura no momento. Ligue o controle e verifique se o receptor está conectado."
                            Style="{StaticResource Value}" Margin="12,0,0,0" VerticalAlignment="Center" />
-            </StackPanel>
+            </DockPanel>
         </Border>
 
         <!-- Controle -->

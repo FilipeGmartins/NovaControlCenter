@@ -489,3 +489,6 @@ probe-reports/
 # A regra *.app (pacotes macOS) casa com a pasta NovaControlCenter.App no Windows (sem diferenciar maiúsculas).
 # Reincluir o projeto da interface; bin/ e obj/ continuam ignorados pelas regras acima.
 !/src/NovaControlCenter.App/
+
+# Saída do dotnet publish (executável de distribuição)
+/publish/

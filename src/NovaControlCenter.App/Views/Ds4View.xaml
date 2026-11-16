@@ -9,6 +9,7 @@
 
         <!-- Amostra de cor clicável -->
         <Style x:Key="Swatch" TargetType="Button">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}" />
             <Setter Property="Width" Value="32" />
             <Setter Property="Height" Value="32" />
             <Setter Property="Margin" Value="0,0,10,10" />
@@ -33,7 +34,7 @@
         <!-- Opção selecionável -->
         <Style x:Key="OptionItem" TargetType="ListBoxItem">
             <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
@@ -94,7 +95,7 @@
                         <Grid>
                             <views:ControllerVisual IsPlayStation="True" />
                             <Border HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource Chip}"
-                                    Visibility="{Binding Touchpad, Converter={StaticResource BoolVis}}" Background="{StaticResource AccentGradient}">
+                                    Visibility="{Binding Touchpad, Converter={StaticResource BoolVis}}" Background="{StaticResource AccentStrong}">
                                 <TextBlock Text="Touchpad" Foreground="White" FontSize="12" FontWeight="SemiBold" />
                             </Border>
                         </Grid>
@@ -236,7 +237,7 @@
                     <Border Style="{StaticResource Card}" Padding="20,16">
                         <StackPanel>
                             <DockPanel>
-                                <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Advanced}" Style="{StaticResource ToggleSwitch}" VerticalAlignment="Center" />
+                                <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Advanced}" Style="{StaticResource ToggleSwitch}" VerticalAlignment="Center" AutomationProperties.Name="Recursos avançados" />
                                 <StackPanel>
                                     <TextBlock Text="Recursos avançados" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource Text}" />
                                     <TextBlock Text="Libera luz, vibração e, pelo Bluetooth, bateria e sensores." Style="{StaticResource Label}" />
@@ -259,13 +260,13 @@
                                     <TextBlock Text="Cor da luz" Style="{StaticResource H2}" Margin="0" VerticalAlignment="Center" />
                                 </DockPanel>
                                 <WrapPanel Margin="0,0,0,6">
-                                    <Button Style="{StaticResource Swatch}" Background="#0050FF" Command="{Binding PresetCommand}" CommandParameter="0050FF" ToolTip="Azul PlayStation" />
-                                    <Button Style="{StaticResource Swatch}" Background="#9B6BFF" Command="{Binding PresetCommand}" CommandParameter="9B6BFF" ToolTip="Violeta Nova" />
-                                    <Button Style="{StaticResource Swatch}" Background="#FF2D55" Command="{Binding PresetCommand}" CommandParameter="FF2D55" ToolTip="Vermelho" />
-                                    <Button Style="{StaticResource Swatch}" Background="#00E070" Command="{Binding PresetCommand}" CommandParameter="00E070" ToolTip="Verde" />
-                                    <Button Style="{StaticResource Swatch}" Background="#FFB000" Command="{Binding PresetCommand}" CommandParameter="FFB000" ToolTip="Âmbar" />
-                                    <Button Style="{StaticResource Swatch}" Background="#00E5FF" Command="{Binding PresetCommand}" CommandParameter="00E5FF" ToolTip="Ciano" />
-                                    <Button Style="{StaticResource Swatch}" Background="#FFFFFF" Command="{Binding PresetCommand}" CommandParameter="FFFFFF" ToolTip="Branco" />
+                                    <Button Style="{StaticResource Swatch}" Background="#0050FF" Command="{Binding PresetCommand}" CommandParameter="0050FF" ToolTip="Azul PlayStation" AutomationProperties.Name="Cor Azul PlayStation" />
+                                    <Button Style="{StaticResource Swatch}" Background="#9B6BFF" Command="{Binding PresetCommand}" CommandParameter="9B6BFF" ToolTip="Violeta Nova" AutomationProperties.Name="Cor Violeta Nova" />
+                                    <Button Style="{StaticResource Swatch}" Background="#FF2D55" Command="{Binding PresetCommand}" CommandParameter="FF2D55" ToolTip="Vermelho" AutomationProperties.Name="Cor Vermelho" />
+                                    <Button Style="{StaticResource Swatch}" Background="#00E070" Command="{Binding PresetCommand}" CommandParameter="00E070" ToolTip="Verde" AutomationProperties.Name="Cor Verde" />
+                                    <Button Style="{StaticResource Swatch}" Background="#FFB000" Command="{Binding PresetCommand}" CommandParameter="FFB000" ToolTip="Âmbar" AutomationProperties.Name="Cor Âmbar" />
+                                    <Button Style="{StaticResource Swatch}" Background="#00E5FF" Command="{Binding PresetCommand}" CommandParameter="00E5FF" ToolTip="Ciano" AutomationProperties.Name="Cor Ciano" />
+                                    <Button Style="{StaticResource Swatch}" Background="#FFFFFF" Command="{Binding PresetCommand}" CommandParameter="FFFFFF" ToolTip="Branco" AutomationProperties.Name="Cor Branco" />
                                 </WrapPanel>
                                 <Expander Header="Cor personalizada" Style="{StaticResource Details}" Margin="0,0,0,12">
                                     <StackPanel>

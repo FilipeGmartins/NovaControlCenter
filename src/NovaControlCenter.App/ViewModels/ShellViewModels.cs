@@ -12,7 +12,11 @@ using NovaControlCenter.Infrastructure.Ds4;
 namespace NovaControlCenter.App.ViewModels;
 
 /// <summary>Item da navegação lateral. Glyph usa a fonte Segoe MDL2 Assets (nativa do Windows 10).</summary>
-public sealed record NavItem(string Title, string Glyph, object ViewModel);
+public sealed record NavItem(string Title, string Glyph, object ViewModel)
+{
+    /// <summary>Lido por leitores de tela no item de menu.</summary>
+    public override string ToString() => Title;
+}
 
 public sealed partial class MainViewModel : ObservableObject
 {

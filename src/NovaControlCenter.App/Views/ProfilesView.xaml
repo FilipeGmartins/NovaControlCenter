@@ -1,4 +1,4 @@
-<UserControl x:Class="NovaControlCenter.App.Views.ProfilesView"
+﻿<UserControl x:Class="NovaControlCenter.App.Views.ProfilesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:conv="clr-namespace:NovaControlCenter.App.Converters"
@@ -9,7 +9,7 @@
         <!-- Cartão de perfil selecionável -->
         <Style x:Key="ProfileCard" TargetType="ListBoxItem">
             <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
@@ -17,7 +17,7 @@
                                 Background="{StaticResource Surface}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
                             <StackPanel>
                                 <DockPanel Margin="0,0,0,8">
-                                    <Border DockPanel.Dock="Right" CornerRadius="10" Padding="8,2" Background="{StaticResource AccentGradient}"
+                                    <Border DockPanel.Dock="Right" CornerRadius="10" Padding="8,2" Background="{StaticResource AccentStrong}"
                                             Visibility="{Binding IsActive, Converter={StaticResource BoolVis}}">
                                         <TextBlock Text="ATIVO" FontSize="10" FontWeight="Bold" Foreground="White" />
                                     </Border>

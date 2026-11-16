@@ -62,6 +62,9 @@ Clean Architecture em 3 camadas + testes. A dependência aponta sempre para dent
 | ADR-30 | Sliders gravam com atraso de 300 ms após o último ajuste; a prévia usa o rascunho na hora | Evita gravar o arquivo dezenas de vezes por segundo ao arrastar |
 | ADR-31 | Áudio do controle via **NAudio.Wasapi** (MIT) atrás de `IControllerAudio` | Os recursos nativos do .NET só tocam no dispositivo padrão; o WASAPI permite escolher a saída/entrada exata do controle sem mexer no padrão do Windows |
 | ADR-32 | Página PS4 em abas, com detalhes técnicos recolhidos (estilos `SegmentTabs`, `Details`, `Hint`) | Pedido do usuário: interface menos poluída, sem perder informação |
+| ADR-33 | `AccentStrong` (#3867E0→#7244DE) para fundos com texto branco; `AccentGradient` só decorativo | Contraste WCAG AA (≥ 4,5:1) |
+| ADR-34 | `FocusRing` como `FocusVisualStyle` em todos os controles interativos | Foco visível para quem navega pelo teclado; não aparece com o mouse |
+| ADR-35 | Distribuição: `PublishSingleFile` + `SelfContained` (win-x64) com compressão | Um só arquivo, sem instalar o .NET |
 
 ## 3. Identificação do controle
 

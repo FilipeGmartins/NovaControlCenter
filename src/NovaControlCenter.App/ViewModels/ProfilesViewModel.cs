@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -9,7 +9,10 @@ using NovaControlCenter.Core.Services;
 namespace NovaControlCenter.App.ViewModels;
 
 /// <summary>Um perfil na lista.</summary>
-public sealed record ProfileItem(Guid Id, string Name, bool IsActive, bool IsDefault, string Summary);
+public sealed record ProfileItem(Guid Id, string Name, bool IsActive, bool IsDefault, string Summary)
+{
+    public override string ToString() => IsActive ? $"{Name} (ativo)" : Name;
+}
 
 /// <summary>Página Perfis: criar, duplicar, renomear, excluir e ativar.</summary>
 public sealed partial class ProfilesViewModel : ObservableObject

@@ -105,7 +105,7 @@
                     </StackPanel>
                 </Border>
                 <TextBlock DockPanel.Dock="Top" Text="MENU" Style="{StaticResource Overline}" Margin="28,0,0,8" />
-                <ListBox ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage}"
+                <ListBox ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage}" AutomationProperties.Name="Menu principal"
                          ItemContainerStyle="{StaticResource NavItem}"
                          Background="Transparent" BorderThickness="0"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
@@ -115,9 +115,9 @@
         <!-- ===== Barra de título ===== -->
         <DockPanel Grid.Column="1" LastChildFill="False">
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" WindowChrome.IsHitTestVisibleInChrome="True">
-                <Button Content="&#xE921;" Style="{StaticResource TitleBarButton}" Click="OnMinimize" ToolTip="Minimizar" />
-                <Button x:Name="MaximizeButton" Content="&#xE922;" Style="{StaticResource TitleBarButton}" Click="OnMaximize" ToolTip="Maximizar" />
-                <Button Content="&#xE8BB;" Style="{StaticResource TitleBarCloseButton}" Click="OnClose" ToolTip="Fechar" />
+                <Button Content="&#xE921;" Style="{StaticResource TitleBarButton}" Click="OnMinimize" ToolTip="Minimizar" AutomationProperties.Name="Minimizar" />
+                <Button x:Name="MaximizeButton" Content="&#xE922;" Style="{StaticResource TitleBarButton}" Click="OnMaximize" ToolTip="Maximizar" AutomationProperties.Name="Maximizar" />
+                <Button Content="&#xE8BB;" Style="{StaticResource TitleBarCloseButton}" Click="OnClose" ToolTip="Fechar" AutomationProperties.Name="Fechar" />
             </StackPanel>
         </DockPanel>
 

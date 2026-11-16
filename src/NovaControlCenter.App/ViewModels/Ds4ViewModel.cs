@@ -12,9 +12,15 @@ using NovaControlCenter.Infrastructure.Ds4;
 
 namespace NovaControlCenter.App.ViewModels;
 
-public sealed record Ds4VariantOption(Ds4OutputVariant Value, string Name, string Detail);
+public sealed record Ds4VariantOption(Ds4OutputVariant Value, string Name, string Detail)
+{
+    public override string ToString() => Name;
+}
 
-public sealed record Ds4ModeOption(Ds4RecognitionMode Value, string Name, string Detail);
+public sealed record Ds4ModeOption(Ds4RecognitionMode Value, string Name, string Detail)
+{
+    public override string ToString() => Name;
+}
 
 /// <summary>Página PS4: monitoramento, bateria, luz e vibração do DualShock 4.</summary>
 public sealed partial class Ds4ViewModel : ObservableObject

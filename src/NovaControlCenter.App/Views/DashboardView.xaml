@@ -30,7 +30,7 @@
                         </StackPanel>
                     </Border>
 
-                    <TextBlock Text="GameSir T4 Nova Lite" FontSize="32" FontWeight="SemiBold" Foreground="{StaticResource Text}" />
+                    <TextBlock Text="GameSir T4 Nova Lite" FontSize="32" FontWeight="SemiBold" Foreground="{StaticResource Text}" TextWrapping="Wrap" />
                     <TextBlock Text="{Binding StatusDescription}" FontSize="14" Foreground="{StaticResource TextMuted}" TextWrapping="Wrap"
                                Margin="0,6,0,20" MaxWidth="520" HorizontalAlignment="Left" />
 
@@ -51,7 +51,7 @@
                 </StackPanel>
 
                 <!-- Ilustração -->
-                <Viewbox Grid.Column="1" Width="300" Margin="24,0,0,0" VerticalAlignment="Center">
+                <Viewbox Grid.Column="1" MaxWidth="300" MinWidth="160" Margin="24,0,0,0" VerticalAlignment="Center">
                     <Canvas Width="640" Height="360">
                         <Path Data="{StaticResource GamepadGeometry}" Fill="{StaticResource ControllerBodyBrush}" Stroke="{StaticResource AccentGradient}" StrokeThickness="3">
                             <Path.Effect>

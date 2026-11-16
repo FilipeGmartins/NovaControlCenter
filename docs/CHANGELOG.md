@@ -2,6 +2,22 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versionamento SemVer.
 
+## [1.0.0-rc.1] — 2026-11-16 — Sprint 06 (qualidade)
+
+### Acessibilidade
+- **Contraste:** texto branco sobre o destaque passou de 3,2:1 para 5,0–5,8:1 (novo `AccentStrong` em botões principais, aba selecionada, selo ATIVO e botões acesos).
+- **Leitor de tela:** o conteúdo das abas não era exposto (faltava `PART_SelectedContentHost` no modelo); corrigido. Nomes acessíveis em botões da barra de título, amostras de cor, interruptor e cabeçalhos recolhíveis; itens de lista leem o título em vez do nome do tipo.
+- **Teclado:** contorno de foco visível (`FocusRing`) em botões, menu, abas, interruptores, sliders e cartões (antes estava desativado em vários).
+
+### Corrigido
+- Dashboard (tamanho mínimo): o título do destaque era cortado; agora quebra linha e a ilustração encolhe.
+- Monitoramento (tamanho mínimo): o aviso de "nenhuma leitura" era cortado.
+
+### Distribuição
+- Executável único `NovaControlCenter.exe` (75,6 MB, self-contained, sem precisar do .NET), validado: abre, mostra a versão, aplica preferências e fecha sem erro.
+- `README.md` e `docs/TEST_CHECKLIST.md` (testes manuais pendentes).
+- Versão `1.0.0-rc.1`.
+
 ## [Não lançado]
 
 ### Áudio do controle (D4-11) — 2026-11-13

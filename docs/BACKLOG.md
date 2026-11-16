@@ -80,9 +80,9 @@ Status: ⬜ a fazer · 🔄 em andamento · ✅ feito · ⛔ bloqueado (aguarda 
 ## Sprint 06 — Qualidade / v1.0
 | ID | Item | Prio | Status |
 |---|---|---|---|
-| S6-01 | Rodada de testes manuais (checklist) + correções | P0 | ⬜ |
-| S6-02 | Revisão de UX/acessibilidade (contraste, teclado, escala de DPI) | P1 | ⬜ |
-| S6-03 | Publicação self-contained single-file + README | P1 | ⬜ |
+| S6-01 | Rodada de testes manuais (checklist) + correções | P0 | 🔄 automação ✅; checklist manual em docs/TEST_CHECKLIST.md |
+| S6-02 | Revisão de UX/acessibilidade (contraste, teclado, escala de DPI) | P1 | 🔄 contraste AA ✅, nomes p/ leitor de tela ✅, foco visível ✅; Tab e DPI no checklist manual |
+| S6-03 | Publicação self-contained single-file + README | P1 | ✅ executável único 75,6 MB + README |
 
 ## Futuro / Em investigação
 | ID | Item | Prio |
