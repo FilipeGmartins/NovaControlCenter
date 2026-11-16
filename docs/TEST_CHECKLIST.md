@@ -1,4 +1,6 @@
-# Checklist de testes manuais — v1.0.0-rc.1
+﻿# Checklist de testes manuais — v1.0.0
+
+> A 1.0.0 foi publicada em 2026-11-16 por decisão do usuário antes da execução deste checklist; os resultados entram numa versão 1.0.x.
 
 Itens que dependem do hardware real, da configuração do Windows ou da percepção do usuário.
 Marque `[x]` e anote o resultado. O que já foi validado por automação está no fim.

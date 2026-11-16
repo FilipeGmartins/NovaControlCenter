@@ -4,7 +4,7 @@
 
 Aplicativo para Windows que monitora e personaliza o **GameSir T4 Nova Lite** (receptor USB 2.4 GHz) e o **DualShock 4** (PS4), sem depender de software oficial.
 
-> Versão **1.0.0-rc.1** (candidata à 1.0). Veja o que ainda falta validar em [docs/TEST_CHECKLIST.md](docs/TEST_CHECKLIST.md).
+> Versão **1.0.0**. Testes manuais com os controles seguem em [docs/TEST_CHECKLIST.md](docs/TEST_CHECKLIST.md).
 
 ## Requisitos
 - Windows 10 (1809 ou mais recente) ou Windows 11, 64 bits.

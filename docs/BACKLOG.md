@@ -82,7 +82,7 @@ Status: ⬜ a fazer · 🔄 em andamento · ✅ feito · ⛔ bloqueado (aguarda 
 |---|---|---|---|
 | S6-01 | Rodada de testes manuais (checklist) + correções | P0 | 🔄 automação ✅; checklist manual em docs/TEST_CHECKLIST.md |
 | S6-02 | Revisão de UX/acessibilidade (contraste, teclado, escala de DPI) | P1 | 🔄 contraste AA ✅, nomes p/ leitor de tela ✅, foco visível ✅; Tab e DPI no checklist manual |
-| S6-03 | Publicação self-contained single-file + README | P1 | ✅ executável único 75,6 MB + README |
+| S6-03 | Publicação self-contained single-file + README | P1 | ✅ v1.0.0 publicada (GitHub Releases) |
 
 ## Futuro / Em investigação
 | ID | Item | Prio |

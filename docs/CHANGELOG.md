@@ -2,6 +2,11 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versionamento SemVer.
 
+## [1.0.0] — 2026-11-16
+
+Primeira versão estável, promovida a partir da 1.0.0-rc.1 sem mudanças de código.
+- Publicada por decisão do usuário **antes** do checklist de testes manuais (``docs/TEST_CHECKLIST.md``); correções que surgirem dele entram em 1.0.x.
+
 ## [1.0.0-rc.1] — 2026-11-16 — Sprint 06 (qualidade)
 
 ### Acessibilidade
